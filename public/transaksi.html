@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Transaksi</title>
+
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/9.6.10/firebase-app-compat.js"></script>
+
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/9.6.10/firebase-auth-compat.js"></script>
+    <script defer src="/__/firebase/9.6.10/firebase-database-compat.js"></script>
+    <!-- 
+            initialize the SDK after all desired features are loaded, set useEmulator to false
+            to avoid connecting the SDK to running emulators.
+          -->
+    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+</head>
+
+<body>
+    <div class="container" id="signincontainer">
+        <button disabled type="button" class="btn btn-default" id="btnSignin" style="float: right;">Sign in with
+            Google</button>
+    </div>
+    <div class="container" id="maincontainer" style="display: none;">
+        <h4 onclick=transaksiOnClick()>Transaksi</h4>
+        <form id="formLubang" class="form-inline">
+            <div class="form-check">
+                <input type="radio" class="form-check-input" onclick="radiol5OnClick()" id="radiol5" name="lubang"
+                    value="l5" checked>
+                <label class="form-check-label" for="l5">L5</label>
+                <input type="radio" class="form-check-input" onclick="radiol4OnClick()" id="radiol4" name="lubang"
+                    value="l4">
+                <label class="form-check-label" for="l4">L4</label>
+                <input type="radio" class="form-check-input" onclick="radiol3OnClick()" id="radiol3" name="lubang"
+                    value="l3">
+                <label class="form-check-label" for="l3">L3</label>
+                <input type="radio" class="form-check-input" onclick="radiol2OnClick()" id="radiol2" name="lubang"
+                    value="l2">
+                <label class="form-check-label" for="l2">L2</label>
+                <input type="radio" class="form-check-input" onclick="radiol1OnClick()" id="radiol1" name="lubang"
+                    value="l1">
+                <label class="form-check-label" for="l1">L1</label>
+            </div>
+        </form>
+        <form id="formTransaksi" class="form-inline">
+            <div class="table-responsive" id="tableTransaksi"></div>
+            <button type="button" class="btn btn-default" onclick="produkOnClick()" id="btnProduk">Tambah</button>
+            <button type="button" class="btn btn-default" onclick="btnNewOnClick()" id="btnNew">Selesai</button>
+        </form>
+        <form id="formSearch" class="form-inline" style="display: none;">
+            <div class="form-group">
+                <input class="form-control" id="inputSearch" type="text" placeholder="Cari..">
+            </div>
+            <button type="button" class="btn btn-default" onclick="transaksiOnClick()" id="btnTransaksi"
+                style="float: right;">Kembali</button>
+            <div class="table-responsive" id="tableProduk"></div>
+        </form>
+        <form id="formEdit" class="form-horizontal" style="display: none;">
+            <div class="form-group">
+                <input type="hidden" class="form-control" id="id">
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="inputNama">Nama:</label>
+                <div class="col-sm-10">
+                    <input readonly class="form-control" id="inputNama" style="text-transform:uppercase">
+                </div>
+            </div>
+            <!-- <div class="form-group">
+                <label for="inputNama">Nama:</label>
+                <input readonly class="form-control" id="inputNama" style="text-transform:uppercase">
+            </div> -->
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="inputLokasi">Lokasi:</label>
+                <div class="col-sm-10">
+                    <input readonly class="form-control" id="inputLokasi" style="text-transform:uppercase">
+                </div>
+            </div>
+            <!-- <div class="form-group">
+                <label for="inputLokasi">Lokasi:</label>
+                <input readonly class="form-control" id="inputLokasi" style="text-transform:uppercase">
+            </div> -->
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="inputHarga">Harga:</label>
+                <div class="col-sm-10">
+                    <input readonly class="form-control" id="inputHarga" style="text-transform:uppercase">
+                </div>
+            </div>
+            <!-- <div class="form-group">
+                <label for="inputHarga">Harga:</label>
+                <input readonly class="form-control" id="inputHarga">
+            </div> -->
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="inputJumlah">Jumlah:</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="inputJumlah" style="text-transform:uppercase">
+                </div>
+            </div>
+            <!-- <div class="form-group">
+                <label for="inputJumlah">Jumlah:</label>
+                <input type="number" class="form-control" id="inputJumlah">
+            </div> -->
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="inputTotal">Total:</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="inputTotal" style="text-transform:uppercase">
+                </div>
+            </div>
+            <!-- <div class="form-group">
+                <label for="inputTotal">Total:</label>
+                <input class="form-control" id="inputTotal">
+            </div> -->
+            <button type="button" class="btn btn-default" onclick="btnTambahOnClick()" id="btnTambah">Tambah</button>
+            <button type="button" class="btn btn-default" onclick="btnUbahOnClick()" id="btnUbah">Ubah</button>
+            <button type="button" class="btn btn-default" onclick="btnBatalOnClick()" id="btnBatal">Batal</button>
+            <button type="button" class="btn btn-default" onclick="btnKembaliOnClick()" id="btnKembali"
+                style="float: right;">Kembali</button>
+        </form>
+    </div>
+
+    <script>
+
+        // ------------------------------------------- variable --------------------------------
+
+        let mProdukDb = {};
+        let moTransaksi = {};
+        let moTransaksi5 = {};
+        let moTransaksi4 = {};
+        let moTransaksi3 = {};
+        let moTransaksi2 = {};
+        let moTransaksi1 = {};
+        let moTransaksiLubang = 5;
+
+        let meRadioL5 = document.getElementById("radiol5");
+        let meRadioL4 = document.getElementById("radiol4");
+        let meRadioL3 = document.getElementById("radiol3");
+        let meRadioL2 = document.getElementById("radiol2");
+        let meRadioL1 = document.getElementById("radiol1");
+
+        let meFormSearch = document.getElementById("formSearch");
+        let meInputSearch = document.getElementById("inputSearch");
+        let meTableProduk = document.getElementById("tableProduk");
+
+        let meFormEdit = document.getElementById("formEdit");
+        let meHiddenId = document.getElementById("id");
+        let meInputNama = document.getElementById("inputNama");
+        let meInputLokasi = document.getElementById("inputLokasi");
+        let meInputHarga = document.getElementById("inputHarga");
+        let meInputJumlah = document.getElementById("inputJumlah");
+        let meInputTotal = document.getElementById("inputTotal");
+        let meBtnTambah = document.getElementById("btnTambah");
+        let meBtnUbah = document.getElementById("btnUbah");
+        let meBtnBatal = document.getElementById("btnBatal");
+        let meBtnKembali = document.getElementById("btnKembali");
+
+        let meFormTransaksi = document.getElementById("formTransaksi");
+        let meTableTransaksi = document.getElementById("tableTransaksi");
+        let meInputGrandTotal = document.getElementById("inputGrandTotal");
+        let meInputBayar = document.getElementById("inputBayar");
+        let meInputKembalian = document.getElementById("inputKembalian");
+
+        // ------------------------------------------- logic --------------------------------
+
+        generateTableTransaksi(moTransaksi);
+
+        // ------------------------------------------- even --------------------------------
+
+        $("#inputJumlah").bind('keyup mouseup', function () {
+            let lHarga = meInputHarga.value.split('.').join('');
+            let lTotal = lHarga * this.value
+            meInputTotal.value = formatRupiah(lTotal.toString());
+        });
+
+        meInputJumlah.addEventListener('keyup', function (e) {
+
+        });
+
+        meInputTotal.addEventListener('keyup', function (e) {
+            meInputTotal.value = formatRupiah(this.value);
+        });
+
+        // ------------------------------------------- click function --------------------------------
+
+        function btnNewOnClick() {
+            moTransaksi = {};
+            generateTableTransaksi(moTransaksi);
+        }
+
+        function btnTambahOnClick() {
+            moTransaksi = Object.assign(moTransaksi, {
+                [meHiddenId.value]: {
+                    "id": meHiddenId.value,
+                    "nama": meInputNama.value,
+                    "lokasi": meInputLokasi.value,
+                    "harga": meInputHarga.value,
+                    "jumlah": meInputJumlah.value,
+                    "total": meInputTotal.value,
+                }
+            });
+            generateTableTransaksi(moTransaksi);
+            meFormEdit.style.display = "none";
+            meFormSearch.style.display = "none";
+            meFormTransaksi.style.display = "block";
+        }
+
+        function btnUbahOnClick() {
+            btnTambahOnClick();
+        }
+
+        function btnBatalOnClick() {
+            delete moTransaksi[meHiddenId.value];
+            generateTableTransaksi(moTransaksi);
+            meFormEdit.style.display = "none";
+            meFormSearch.style.display = "none";
+            meFormTransaksi.style.display = "block";
+        }
+
+        function btnKembaliOnClick() {
+            meHiddenId.value = "";
+            meInputNama.value = "";
+            meInputLokasi.value = "";
+            meInputHarga.value = "";
+            meInputJumlah.value = "";
+            meInputTotal.value = "";
+            meFormEdit.style.display = "none";
+            if (meBtnUbah.disabled) {
+                meFormSearch.style.display = "block";
+            } else {
+                meFormTransaksi.style.display = "block";
+            }
+        }
+
+        function kembalianOnClick() {
+            let lGrandTotal = meInputGrandTotal.value.split('.').join('');
+            let lBayar = meInputBayar.value.split('.').join('');
+            meInputKembalian.value = formatRupiah((lBayar - lGrandTotal).toString());
+        }
+
+        function produkOnClick() {
+            if (meFormSearch.style.display === "none") {
+                meFormSearch.style.display = "block";
+                meFormEdit.style.display = "none";
+                meFormTransaksi.style.display = "none";
+            } else {
+                meFormSearch.style.display = "none";
+            }
+        }
+
+        function transaksiOnClick() {
+            if (meFormTransaksi.style.display === "none") {
+                meFormSearch.style.display = "none";
+                meFormEdit.style.display = "none";
+                meFormTransaksi.style.display = "block";
+            } else {
+                meFormTransaksi.style.display = "none";
+            }
+        }
+
+        function tableProdukOnClick(lid) {
+            meFormEdit.style.display = "block";
+            meFormSearch.style.display = "none";
+            meFormTransaksi.style.display = "none";
+            meBtnTambah.disabled = false;
+            meBtnUbah.disabled = true;
+            meBtnBatal.disabled = true;
+            meHiddenId.value = "";
+            meInputNama.value = "";
+            meInputLokasi.value = "";
+            meInputHarga.value = "";
+            meInputJumlah.value = "";
+            meInputTotal.value = "";
+            for (var i in mProdukDb) {
+                if (mProdukDb[i]["id"] == lid) {
+                    meHiddenId.value = mProdukDb[i]["id"];
+                    meInputNama.value = mProdukDb[i]["nama"];
+                    meInputLokasi.value = mProdukDb[i]["lokasi"];
+                    meInputHarga.value = mProdukDb[i]["harga"];
+                }
+            }
+        }
+
+        function tableTransaksiOnClick(lid) {
+            meFormEdit.style.display = "block";
+            meFormSearch.style.display = "none";
+            meFormTransaksi.style.display = "none";
+            meBtnTambah.disabled = true;
+            meBtnUbah.disabled = false;
+            meBtnBatal.disabled = false;
+            meHiddenId.value = "";
+            meInputNama.value = "";
+            meInputLokasi.value = "";
+            meInputHarga.value = "";
+            meInputJumlah.value = "";
+            meInputTotal.value = "";
+            for (var i in moTransaksi) {
+                if (moTransaksi[i]["id"] == lid) {
+                    meHiddenId.value = moTransaksi[i]["id"];
+                    meInputNama.value = moTransaksi[i]["nama"];
+                    meInputLokasi.value = moTransaksi[i]["lokasi"];
+                    meInputHarga.value = moTransaksi[i]["harga"];
+                    meInputJumlah.value = moTransaksi[i]["jumlah"];
+                    meInputTotal.value = moTransaksi[i]["total"];
+                }
+            }
+        }
+
+        function radiol5OnClick() {
+            switchTransaksi();
+            moTransaksi = moTransaksi5;
+            moTransaksiLubang = 5;
+            generateTableTransaksi(moTransaksi);
+        }
+
+        function radiol4OnClick() {
+            switchTransaksi();
+            moTransaksi = moTransaksi4;
+            moTransaksiLubang = 4;
+            generateTableTransaksi(moTransaksi);
+        }
+
+        function radiol3OnClick() {
+            switchTransaksi();
+            moTransaksi = moTransaksi3;
+            moTransaksiLubang = 3;
+            generateTableTransaksi(moTransaksi);
+        }
+
+        function radiol2OnClick() {
+            switchTransaksi();
+            moTransaksi = moTransaksi2;
+            moTransaksiLubang = 2;
+            generateTableTransaksi(moTransaksi);
+        }
+
+        function radiol1OnClick() {
+            switchTransaksi();
+            moTransaksi = moTransaksi1;
+            moTransaksiLubang = 1;
+            generateTableTransaksi(moTransaksi);
+        }
+
+        // ------------------------------------------- function --------------------------------
+
+        document.addEventListener('DOMContentLoaded', function () {
+            try {
+                let app = firebase.app();
+                let features = [
+                    'auth',
+                    'database',
+                ].filter(feature => typeof app[feature] === 'function');
+            } catch (e) {
+                console.error(e);
+            }
+        });
+
+        $(document).ready(function () {
+            $("#inputSearch").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#tableProduk tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+
+        function formatRupiah(angka, prefix) {
+            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+                split = number_string.split(','),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+        }
+
+        function generateTableProduk(db) {
+            text = "<table class='table table-bordered table-striped'>";
+            text += "<tr><th>Nama</th><th>Stok</th><th>Harga</th><th>Update</th></tr></thead>";
+            text += "<tbody id='myTable'>";
+            for (x in db) {
+                text += "<tr>";
+                text += "<td onclick=tableProdukOnClick('" + db[x].id + "')>" + db[x].nama + "</td>";
+                text += "<td onclick=tableProdukOnClick('" + db[x].id + "')>" + db[x].stok + "</td>";
+                text += "<td onclick=tableProdukOnClick('" + db[x].id + "')>" + db[x].harga + "</td>";
+                text += "<td onclick=tableProdukOnClick('" + db[x].id + "')>" + db[x].update + "</td>";
+                text += "</tr>";
+            }
+            text += "</tbody>"
+            text += "</table>"
+            meTableProduk.innerHTML = text;
+        }
+
+        function generateTableTransaksi(db) {
+            let lGrandTotal = 0;
+
+            text = "<table class='table table-bordered table-striped'>";
+            text += "<tr><th>Nama</th><th>Harga</th><th>Jumlah</th><th>Total</th></tr></thead>";
+            text += "<tbody id='myTable'>";
+            for (x in db) {
+                text += "<tr>";
+                text += "<td onclick=tableTransaksiOnClick('" + db[x].id + "')>" + db[x].nama + "</td>";
+                text += "<td onclick=tableTransaksiOnClick('" + db[x].id + "')>" + db[x].harga + "</td>";
+                text += "<td onclick=tableTransaksiOnClick('" + db[x].id + "')>" + db[x].jumlah + "</td>";
+                text += "<td style='text-align: right' onclick=tableTransaksiOnClick('" + db[x].id + "')>" + db[x].total + "</td>";
+                text += "</tr>";
+                let lTotal = db[x].total.split('.').join('');
+                lGrandTotal = lGrandTotal + parseInt(lTotal);
+            }
+            text += "<tr><td colspan='2'>Grand Total</td><td colspan='2'><input  class=form-control style='text-align: right' id=inputGrandTotal readonly='true'></td></tr>";
+            text += "<tr><td colspan='2'>Bayar</td><td colspan='2'><input class=form-control style='text-align: right' id=inputBayar></td></tr>";
+            text += "<tr><td colspan='2' onclick='kembalianOnClick()'>Kembalian</td><td colspan='2'><input class=form-control style='text-align: right' id=inputKembalian readonly='true' onclick='kembalianOnClick()'></td></tr>";
+            text += "</tbody>"
+            text += "</table>"
+            meTableTransaksi.innerHTML = text;
+
+            meInputGrandTotal = document.getElementById("inputGrandTotal");
+            meInputBayar = document.getElementById("inputBayar");
+            meInputKembalian = document.getElementById("inputKembalian");
+
+            meInputBayar.addEventListener('keyup', function (e) {
+                meInputBayar.value = formatRupiah(this.value);
+            });
+
+            meInputGrandTotal.value = formatRupiah(lGrandTotal.toString());
+        }
+
+        function switchTransaksi() {
+            switch (moTransaksiLubang) {
+                case 5:
+                    moTransaksi5 = moTransaksi;
+                    break;
+                case 4:
+                    moTransaksi4 = moTransaksi;
+                    break;
+                case 3:
+                    moTransaksi3 = moTransaksi;
+                    break;
+                case 2:
+                    moTransaksi2 = moTransaksi;
+                    break;
+                case 1:
+                    moTransaksi1 = moTransaksi;
+                    break;
+            }
+        }
+
+        function toggleSignIn() {
+            if (!firebase.auth().currentUser) {
+                var provider = new firebase.auth.GoogleAuthProvider();
+                provider.addScope('https://www.googleapis.com/auth/plus.login');
+                firebase.auth().signInWithRedirect(provider);
+            } else {
+                firebase.auth().signOut();
+            }
+            document.getElementById('btnSignin').disabled = true;
+        }
+
+        function initApp() {
+            firebase.auth().getRedirectResult().then(function (result) {
+                if (result.credential) {
+                    var token = result.credential.accessToken;
+                } else {
+
+                }
+                var user = result.user;
+            }).catch(function (error) {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                var email = error.email;
+                var credential = error.credential;
+                if (errorCode === 'auth/account-exists-with-different-credential') {
+                    alert('You have already signed up with a different auth provider for that email.');
+                } else {
+                    console.error(error);
+                }
+            });
+
+            firebase.auth().onAuthStateChanged(function (user) {
+                if (user) {
+                    // User is signed in.
+                    var displayName = user.displayName;
+                    document.getElementById('btnSignin').textContent = 'Sign out ' + user.email;
+                    document.getElementById('maincontainer').style.display = "block"
+
+                    // changed
+                    firebase.database().ref('/produk').on('child_changed', (snapshot) => {
+                        $changedPost = snapshot.val();
+                        for (let i in mProdukDb) {
+                            if (mProdukDb[i]["id"] == $changedPost.id) {
+                                mProdukDb[i]["nama"] = $changedPost.nama;
+                                mProdukDb[i]["lokasi"] = $changedPost.lokasi;
+                                mProdukDb[i]["stok"] = $changedPost.stok;
+                                mProdukDb[i]["updatestok"] = $changedPost.updatestok;
+                                mProdukDb[i]["beli"] = $changedPost.beli;
+                                mProdukDb[i]["harga"] = $changedPost.harga;
+                                mProdukDb[i]["update"] = $changedPost.update;
+                            }
+                        }
+                        generateTableProduk(mProdukDb);
+                    });
+
+                    // child_added
+                    firebase.database().ref('/produk').on('child_added', (snapshot) => {
+                        mProdukDb = Object.assign(mProdukDb, {
+                            [snapshot.val().id]: {
+                                "id": snapshot.val().id,
+                                "nama": snapshot.val().nama,
+                                "lokasi": snapshot.val().lokasi,
+                                "stok": snapshot.val().stok,
+                                "updatestok": snapshot.val().updatestok,
+                                "beli": snapshot.val().beli,
+                                "harga": snapshot.val().harga,
+                                "update": snapshot.val().update
+                            }
+                        });
+                        generateTableProduk(mProdukDb);
+                    });
+
+                    // child_removed
+                    firebase.database().ref('/produk').on('child_removed', (snapshot) => {
+                        for (var i in mProdukDb) {
+                            if (mProdukDb[i]["id"] == snapshot.val().id) {
+                                delete mProdukDb[i];
+                            }
+                        }
+                        generateTableProduk(mProdukDb);
+                    });
+                } else {
+                    // User is signed out.
+                    document.getElementById('btnSignin').textContent = 'Sign in with Google';
+                    document.getElementById('maincontainer').style.display = "none"
+                }
+                document.getElementById('btnSignin').disabled = false;
+            });
+
+            document.getElementById('btnSignin').addEventListener('click', toggleSignIn, false);
+        }
+
+        window.onload = function () {
+            initApp();
+        };
+
+    </script>
+
+</body>
+
+</html>

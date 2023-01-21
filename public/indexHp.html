@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Produk</title>
+
+  <!-- update the version number as needed -->
+  <script defer src="/__/firebase/9.6.10/firebase-app-compat.js"></script>
+
+  <!-- include only the Firebase features as you need -->
+  <script defer src="/__/firebase/9.6.10/firebase-auth-compat.js"></script>
+  <script defer src="/__/firebase/9.6.10/firebase-database-compat.js"></script>
+  <!-- 
+      initialize the SDK after all desired features are loaded, set useEmulator to false
+      to avoid connecting the SDK to running emulators.
+    -->
+  <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+</head>
+
+<!-- --------------------------------------------------------------------------------------------- -->
+
+<body>
+  <div class="container" id="signincontainer">
+    <button disabled type="button" class="btn btn-default" id="btnSignin" style="float: right;">Sign in with
+      Google</button>
+  </div>
+  <div class="container" id="maincontainer">
+    <form id="formSearch" class="form-inline">
+      <br />
+      <div class="form-group">
+        <input class="form-control" id="search" type="text" placeholder="Cari..">
+      </div>
+      <div class="table-responsive" id="table"></div>
+      <button type="button" class="btn btn-default" onclick="btnTambahOnClick()" id="btnTambah">Tambah</button>
+    </form>
+    <form class="form-inline" id="formEdit" style="display: none;">
+      <div class="form-group">
+        <input type="hidden" class="form-control" id="id">
+      </div>
+      <div class="form-group">
+        <label for="nama">Nama:</label>
+        <input class="form-control" id="nama" style="text-transform:uppercase">
+      </div>
+      <div class="form-group">
+        <label for="stok">Stok:</label>
+        <input class="form-control" id="stok">
+      </div>
+      <div class="form-group">
+        <label for="updatestok">Update Stok:</label>
+        <input class="form-control" id="updatestok" readonly>
+      </div>
+      <div class="form-group">
+        <label for="beli">Beli:</label>
+        <input class="form-control" id="beli">
+      </div>
+      <div class="form-group">
+        <label for="harga">Jual:</label>
+        <input class="form-control" id="harga">
+      </div>
+      <div class="form-group">
+        <label for="het">Het:</label>
+        <input class="form-control" id="het">
+      </div>
+      <div class="form-group">
+        <label for="update">Update Harga:</label>
+        <input class="form-control" id="update" readonly>
+      </div>
+      <div class="form-group">
+        <label for="lokasi">Lokasi:</label>
+        <input class="form-control" id="lokasi" style="text-transform:uppercase">
+      </div>
+      <button type="button" class="btn btn-default" onclick="btnSimpanOnClick()" id="btnSimpan"><span
+          class="glyphicon glyphicon-ok"></span></button>
+      <button type="button" class="btn btn-default" onclick="btnHapusOnClick()" id="btnHapus"><span
+          class="glyphicon glyphicon-trash"></span></button>
+      <button type="button" class="btn btn-default" onclick="btnRiwayatOnClick()" id="btnRiwayat"><span
+          class="glyphicon glyphicon-time"></span></button>
+      <button type="button" class="btn btn-default" onclick="btnKopiOnClick()" id="btnKopi"><span
+          class="glyphicon glyphicon-copy"></button>
+      <button type="button" class="btn btn-default" onclick="toggleSearch()" id="btnBatal"
+        style="float: right;">Kembali</button>
+      <br />
+      <br />
+      <table class="table table-responsive table-bordered table-striped" id="tableRiwayat" style="display: none;">
+      </table>
+    </form>
+  </div>
+  <div class="container" id="debugcontainer" style="display: none; color:white;">
+    <h2>Debug</h2>
+    <form class="form-inline">
+      <p id="load">Firebase SDK Loading&hellip;</p>
+      <p id="jumlah"></p>
+      <p id="debug"></p>
+      <div class="quickstart-user-details-container">
+        <div>Firebase auth object value:</div>
+        <div id="quickstart-account-details">null</div>
+        <div>Google OAuth Access Token:</div>
+        <div id="quickstart-oauthtoken">null</div>
+      </div>
+    </form>
+  </div>
+  <br />
+  <br />
+  <!-- --------------------------------------------------------------------------------------------- -->
+
+  <script>
+    // --------------------------------variable--------------------------------
+
+    let txtId = document.getElementById('id');
+    let txtStok = document.getElementById('stok');
+    let txtBeli = document.getElementById('beli');
+    let txtHarga = document.getElementById('harga');
+    let txtHet = document.getElementById('het');
+    let mStok = "";
+    let mBeli = "";
+    let mHarga = "";
+    let mHet = "";
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const loadEl = document.querySelector('#load');
+      $db = {};
+      try {
+        let app = firebase.app();
+        let features = [
+          'auth',
+          'database',
+        ].filter(feature => typeof app[feature] === 'function');
+        loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
+      } catch (e) {
+        console.error(e);
+        loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
+      }
+
+      // #################### mylogic ##########################
+
+      if (!firebase.auth().currentUser) {
+        // Get the data on a post that has changed
+        firebase.database().ref('/produk').on('child_changed', (snapshot) => {
+          $changedPost = snapshot.val();
+          for (let i in $db) {
+            if ($db[i]["id"] == $changedPost.id) {
+              $db[i]["nama"] = $changedPost.nama;
+              $db[i]["stok"] = $changedPost.stok;
+              $db[i]["updatestok"] = $changedPost.updatestok;
+              $db[i]["beli"] = $changedPost.beli;
+              $db[i]["harga"] = $changedPost.harga;
+              $db[i]["het"] = $changedPost.harga;
+              $db[i]["update"] = $changedPost.update;
+              $db[i]["lokasi"] = $changedPost.lokasi;
+            }
+          }
+          generateTable($db);
+        });
+
+        // child_added
+        firebase.database().ref('/produk').on('child_added', (snapshot) => {
+          $db = Object.assign($db, {
+            [snapshot.val().id]: {
+              "id": snapshot.val().id,
+              "nama": snapshot.val().nama,
+              "stok": snapshot.val().stok,
+              "updatestok": snapshot.val().updatestok,
+              "beli": snapshot.val().beli,
+              "harga": snapshot.val().harga,
+              "het": snapshot.val().het,
+              "update": snapshot.val().update,
+              "lokasi": snapshot.val().lokasi
+            }
+          });
+          generateTable($db);
+        });
+
+        // child_removed
+        firebase.database().ref('/produk').on('child_removed', (snapshot) => {
+          for (var i in $db) {
+            if ($db[i]["id"] == snapshot.val().id) {
+              delete $db[i];
+            }
+          }
+          generateTable($db);
+        });
+      }
+    });
+
+    txtStok.addEventListener('keyup', function (e) {
+      txtStok.value = formatRupiah(this.value);
+    });
+
+    txtBeli.addEventListener('keyup', function (e) {
+      txtBeli.value = formatRupiah(this.value);
+    });
+
+    txtHarga.addEventListener('keyup', function (e) {
+      txtHarga.value = formatRupiah(this.value);
+    });
+
+    txtHet.addEventListener('keyup', function (e) {
+      txtHet.value = formatRupiah(this.value);
+    });
+
+    $(document).ready(function () {
+      $("#search").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#myTable tr").filter(function () {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+
+    function formatRupiah(angka, prefix) {
+      var number_string = angka.replace(/[^,\d]/g, '').toString(),
+        split = number_string.split(','),
+        sisa = split[0].length % 3,
+        rupiah = split[0].substr(0, sisa),
+        ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+      if (ribuan) {
+        separator = sisa ? '.' : '';
+        rupiah += separator + ribuan.join('.');
+      }
+
+      rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+      return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+    }
+
+    function generateTable(db) {
+      text = "<table class='table table-bordered table-striped'>";
+      text += "<tr><th>Nama</th><th>Stok</th><th>Harga</th><th>Update</th></tr></thead>";
+      text += "<tbody id='myTable'>";
+      for (x in db) {
+        text += "<tr>";
+        text += "<td onclick=tableonclick('" + db[x].id + "')>" + db[x].nama + "</td>";
+        text += "<td onclick=tableonclick('" + db[x].id + "')>" + db[x].stok + "</td>";
+        // text += "<td onclick=tableonclick('" + db[x].id + "')>" + db[x].beli + "</td>";
+        text += "<td onclick=tableonclick('" + db[x].id + "')>" + db[x].harga + "</td>";
+        text += "<td onclick=tableonclick('" + db[x].id + "')>" + db[x].update + "</td>";
+        text += "</tr>";
+      }
+      text += "</tbody>"
+      text += "</table>"
+      document.getElementById("table").innerHTML = text;
+    }
+
+    function tableonclick(id) {
+      document.getElementById("formEdit").style.display = "block";
+      cari(id);
+      toggleSearch();
+      document.getElementById("btnHapus").disabled = false;
+      document.getElementById("btnRiwayat").disabled = false;
+      document.getElementById("btnKopi").disabled = false;
+    }
+
+    function btnSimpanOnClick() {
+      let id = document.getElementById("id").value;
+      let today = new Date();
+      let dd = String(today.getDate()).padStart(2, '0');
+      let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+      let yyyy = today.getFullYear();
+      today = dd + '-' + mm + '-' + yyyy;
+      let updatestok = today;
+      let update = today;
+      let refdbproduk = firebase.database().ref('/produk');
+      if (id.length > 0) {
+        // update
+        if (document.getElementById("beli").value == mBeli && document.getElementById("harga").value == mHarga && document.getElementById("het").value == mHet) {
+          update = document.getElementById("update").value;
+        } else {
+          // update riwayat
+          let refdbupdate = firebase.database().ref('/update/' + id);
+          let updateday = yyyy + mm + dd;
+          refdbupdate.update({
+            [updateday]: {
+              updateday: updateday,
+              beli: mBeli,
+              harga: mHarga,
+              het: mHet,
+              update: today,
+              user: firebase.auth().currentUser.email
+            }
+          });
+        }
+        if (document.getElementById("stok").value == mStok) {
+          updatestok = document.getElementById("updatestok").value;
+        }
+        // update data
+        refdbproduk.update({
+          [id + "/nama"]: document.getElementById("nama").value.toUpperCase()
+          , [id + "/stok"]: document.getElementById("stok").value
+          , [id + "/updatestok"]: updatestok
+          , [id + "/beli"]: document.getElementById("beli").value
+          , [id + "/harga"]: document.getElementById("harga").value
+          , [id + "/het"]: document.getElementById("het").value
+          , [id + "/update"]: update
+          , [id + "/lokasi"]: document.getElementById("lokasi").value
+          , [id + "/user"]: firebase.auth().currentUser.email
+        });
+      } else {
+        // tambah
+        let id = document.getElementById("nama").value.split(' ').join('').toLowerCase();
+        refdbproduk.update({
+          [id]: {
+            id: id,
+            nama: document.getElementById("nama").value.toUpperCase(),
+            stok: document.getElementById("stok").value,
+            updatestok: today,
+            beli: document.getElementById("beli").value,
+            harga: document.getElementById("harga").value,
+            het: document.getElementById("het").value,
+            update: today,
+            lokasi: document.getElementById("lokasi").value,
+            user: firebase.auth().currentUser.email
+          }
+        });
+      }
+      document.getElementById("formSearch").style.display = "block";
+      document.getElementById("formEdit").style.display = "none";
+    }
+
+    function btnTambahOnClick() {
+      document.getElementById("id").value = "";
+      document.getElementById("nama").value = "";
+      document.getElementById("stok").value = "";
+      document.getElementById("updatestok").value = "";
+      document.getElementById("beli").value = "";
+      document.getElementById("harga").value = "";
+      document.getElementById("update").value = "";
+      document.getElementById("het").value = "";
+      document.getElementById("lokasi").value = "";
+      document.getElementById("formSearch").style.display = "none";
+      document.getElementById("formEdit").style.display = "block";
+      document.getElementById("btnHapus").disabled = true;
+      document.getElementById("btnRiwayat").disabled = true;
+      document.getElementById("btnKopi").disabled = true;
+    }
+
+    function btnHapusOnClick() {
+      if (confirm("Hapus " + document.getElementById("nama").value + " ?")) {
+        let id = document.getElementById("id").value;
+        let refdbproduk = firebase.database().ref('/produk');
+        refdbproduk.child(id).remove();
+
+        if (confirm("Hapus riwayat harga ?")) {
+          let lRefDbUpdate = firebase.database().ref('/update/');
+          lRefDbUpdate.child(id).remove();
+        }
+
+        document.getElementById("formSearch").style.display = "block";
+        document.getElementById("formEdit").style.display = "none";
+      }
+    }
+
+    function btnRiwayatOnClick() {
+      firebase.database().ref('/update/' + txtId.value).once('value', (snapshot) => {
+        $riwayat = snapshot.val();
+        let text = "";
+        text += "<tr><th>Expired</th><th>Beli</th><th>Jual</th><th>Het</th><th>Del</th></tr></thead>";
+        text += "<tbody id='mytableRiwayat'>";
+        for (x in $riwayat) {
+          text += "<tr>";
+          text += "<td>" + $riwayat[x].update + "</td>";
+          text += "<td>" + $riwayat[x].beli + "</td>";
+          text += "<td>" + $riwayat[x].harga + "</td>";
+          text += "<td>" + $riwayat[x].het + "</td>";
+          // text += "<td>" + $riwayat[x].updateday + "</td>";
+          text += "<td><button type='button' class='btn btn-default' onclick='btnHapusRiwayatOnClick(this," + $riwayat[x].updateday + ")' value='Delete'><span class='glyphicon glyphicon-trash'></span></button></td>";
+          text += "</tr>";
+        }
+        text += "</tbody>";
+        document.getElementById("tableRiwayat").style.display = "block";
+        document.getElementById("tableRiwayat").innerHTML = text;
+      });
+    }
+
+    function btnHapusRiwayatOnClick(lBtn, lUpdateDay) {
+      let lRowIndex = lBtn.parentNode.parentNode.rowIndex;
+      let lTableRiwayat = document.getElementById("tableRiwayat");
+      let lUpdate = lTableRiwayat.rows[lRowIndex].cells[0].innerHTML;
+      // confirm(r);
+      if (confirm("Hapus riwayat tgl " + lUpdate + " ?")) {
+        let lRefDbUpdate = firebase.database().ref('/update/' + txtId.value);
+        lRefDbUpdate.child(lUpdateDay).remove();
+        btnRiwayatOnClick();
+      }
+    }
+
+    function btnKopiOnClick() {
+      txtId.value = "";
+    }
+
+    function cariDb(key) {
+      let dbRef = firebase.database().ref('/produk')
+      dbRef.child(key).get().then((snapshot) => {
+        if (snapshot.exists()) {
+          console.log(snapshot.val());
+        } else {
+          console.log("Data tidak ditemukan");
+        }
+      }).catch((error) => {
+        console.error(error);
+      });
+    }
+
+    function cari(searchVal) {
+      document.getElementById("id").value = "";
+      document.getElementById("nama").value = "";
+      document.getElementById("stok").value = "";
+      document.getElementById("updatestok").value = "";
+      document.getElementById("beli").value = "";
+      document.getElementById("harga").value = "";
+      document.getElementById("het").value = "";
+      document.getElementById("update").value = "";
+      document.getElementById("lokasi").value = "";
+      for (var i in $db) {
+        if ($db[i]["id"] == searchVal) {
+          mStok = $db[i]["stok"];
+          mBeli = $db[i]["beli"];
+          mHarga = $db[i]["harga"];
+          mHet = $db[i]["het"];
+          document.getElementById("id").value = $db[i]["id"];
+          document.getElementById("nama").value = $db[i]["nama"];
+          document.getElementById("stok").value = $db[i]["stok"];
+          document.getElementById("updatestok").value = $db[i]["updatestok"];
+          document.getElementById("beli").value = $db[i]["beli"];
+          document.getElementById("harga").value = $db[i]["harga"];
+          document.getElementById("het").value = $db[i]["het"];
+          document.getElementById("update").value = $db[i]["update"];
+          document.getElementById("lokasi").value = $db[i]["lokasi"];
+        }
+      }
+    }
+
+    function toggleSearch() {
+      let x = document.getElementById("formSearch");
+      if (x.style.display === "none") {
+        x.style.display = "block";
+        document.getElementById("formEdit").style.display = "none";
+        document.getElementById("tableRiwayat").style.display = "none";
+      } else {
+        x.style.display = "none";
+      }
+    }
+
+    function toggleSignIn() {
+      if (!firebase.auth().currentUser) {
+        var provider = new firebase.auth.GoogleAuthProvider();
+        provider.addScope('https://www.googleapis.com/auth/plus.login');
+        firebase.auth().signInWithRedirect(provider);
+      } else {
+        firebase.auth().signOut();
+      }
+      document.getElementById('btnSignin').disabled = true;
+    }
+
+    function initApp() {
+      // Result from Redirect auth flow.
+      firebase.auth().getRedirectResult().then(function (result) {
+        if (result.credential) {
+          // This gives you a Google Access Token. You can use it to access the Google API.
+          var token = result.credential.accessToken;
+          document.getElementById('quickstart-oauthtoken').textContent = token;
+        } else {
+          document.getElementById('quickstart-oauthtoken').textContent = 'null';
+        }
+        // The signed-in user info.
+        var user = result.user;
+      }).catch(function (error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // The email of the user's account used.
+        var email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        var credential = error.credential;
+        if (errorCode === 'auth/account-exists-with-different-credential') {
+          alert('You have already signed up with a different auth provider for that email.');
+          // If you are using multiple auth providers on your app you should handle linking
+          // the user's accounts here.
+        } else {
+          console.error(error);
+        }
+      });
+
+      // Listening for auth state changes.
+      firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+          // User is signed in.
+          var displayName = user.displayName;
+          document.getElementById('btnSignin').textContent = 'Sign out ' + user.email;
+          document.getElementById('quickstart-account-details').textContent = JSON.stringify(user, null, '  ');
+          document.getElementById('maincontainer').style.display = "block"
+        } else {
+          // User is signed out.
+          document.getElementById('btnSignin').textContent = 'Sign in with Google';
+          document.getElementById('quickstart-account-details').textContent = 'null';
+          document.getElementById('quickstart-oauthtoken').textContent = 'null';
+          document.getElementById('maincontainer').style.display = "none"
+        }
+        document.getElementById('btnSignin').disabled = false;
+      });
+
+      document.getElementById('btnSignin').addEventListener('click', toggleSignIn, false);
+    }
+
+    window.onload = function () {
+      initApp();
+    };
+  </script>
+</body>
+
+</html>

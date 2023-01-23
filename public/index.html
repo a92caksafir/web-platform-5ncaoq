@@ -41,7 +41,8 @@
         <table class="table table-bordered table-striped" id="table">
         </table>
       </div>
-      <button type="button" class="btn btn-default" onclick="btnTambahOnClick()" id="btnTambah">Tambah</button>
+      <button type="button" class="btn btn-default" onclick="btnTambahOnClick()" id="btnTambah"><span
+          class="glyphicon glyphicon-plus"></span></button>
       <button type="button" class="btn btn-default" onclick="btnBackupOnClick()" id="btnBackup">Backup</button>
     </form>
     <form class="form-horizontal" id="formEdit" style="display: none;">
@@ -106,9 +107,7 @@
           <button type="button" class="btn btn-default" onclick="btnRiwayatOnClick()" id="btnRiwayat"><span
               class="glyphicon glyphicon-time"></span></button>
           <button type="button" class="btn btn-default" onclick="btnKopiOnClick()" id="btnKopi"><span
-              class="glyphicon glyphicon-copy"></button>
-          <button type="button" class="btn btn-default" onclick="btnKopiOnClick()" id="btnKopi"><span
-              class="glyphicon glyphicon-copy"></button>
+              class="glyphicon glyphicon-duplicate"></button>
           <button type="button" class="btn btn-default" onclick="toggleSearch()" id="btnBatal"
             style="float: right;">Kembali</button>
         </div>
@@ -691,7 +690,7 @@
       a.click();
       URL.revokeObjectURL(a.href)
     }
-  
+
   </script>
 </body>
 

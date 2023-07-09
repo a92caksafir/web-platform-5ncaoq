@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Transaksi</title>
+    <title>Transaksiku</title>
 
     <!-- update the version number as needed -->
     <script defer src="/__/firebase/9.6.10/firebase-app-compat.js"></script>
@@ -155,11 +155,17 @@
         let mBeli = 0;
         let mHarga = 0;
         let mHet = 0;
+        let mLokasi = "";
 
         let mStok = 0;
         let mUpdatestok = "";
-        let mUupdate = "";
+        let mUpdate = "";
 
+        let mdToday = new Date();
+        let mddd = String(mdToday.getDate()).padStart(2, '0');
+        let mdmm = String(mdToday.getMonth() + 1).padStart(2, '0'); //January is 0!
+        let mdyyyy = mdToday.getFullYear();
+        mdToday = mddd + '-' + mdmm + '-' + mdyyyy;
         // ------------------------------------------- logic --------------------------------
 
         generateTableTransaksi(moTransaksi);
@@ -217,48 +223,49 @@
         }
 
         function btnSimpanOnClick() {
-            let today = new Date();
-            let dd = String(today.getDate()).padStart(2, '0');
-            let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-            let yyyy = today.getFullYear();
-            today = dd + '-' + mm + '-' + yyyy;
-            let update = today;
             let refdbproduk = firebase.database().ref('/produk');
-            console.log(refdbproduk);
-            if (meHiddenId.length > 0) {
-                // update
-                if (meInputHarga.value == mHarga) {
-                    update = mUpdate;
-                } else {
-                    // update riwayat
-                    if (typeof mBeli === "undefined") mBeli = 0;
-                    if (typeof mHarga === "undefined") mHarga = 0;
-                    if (typeof mHet === "undefined") mHet = 0;
-                    let refdbupdate = firebase.database().ref('/update/' + meHiddenId);
-                    let updateday = yyyy + mm + dd;
-                    refdbupdate.update({
-                        [updateday]: {
-                            updateday: updateday,
-                            beli: mBeli,
-                            harga: mHarga,
-                            het: mHet,
-                            update: today,
-                            user: firebase.auth().currentUser.email
-                        }
+            // console.log("meHiddenId.value : " + meHiddenId.value);
+            // console.log("meHiddenId.value.length : " + meHiddenId.value.length);
+            // console.log("mUpdate : " + mUpdate);
+            // console.log("update : " + update);
+            // console.log("mHarga : " + mHarga);
+            // console.log("meInputHarga.value : " + meInputHarga.value);
+            if (meHiddenId.value.length > 0) {
+                if (meInputHarga.value.length > 0) {
+                    if (meInputHarga.value != mHarga) {
+                        // update riwayat
+                        // console.log("update riwayat");
+                        if (typeof mBeli === "undefined") mBeli = 0;
+                        if (typeof mHarga === "undefined") mHarga = 0;
+                        if (typeof mHet === "undefined") mHet = 0;
+                        let refdbupdate = firebase.database().ref('/update/' + meHiddenId.value);
+                        let updateday = mdyyyy + mdmm + mddd;
+                        refdbupdate.update({
+                            [updateday]: {
+                                updateday: updateday,
+                                beli: mBeli,
+                                harga: mHarga,
+                                het: mHet,
+                                update: mdToday,
+                                user: firebase.auth().currentUser.email
+                            }
+                        });
+                    }
+                    // update harga
+                    refdbproduk.update({
+                        [meHiddenId.value + "/harga"]: meInputHarga.value
+                        , [meHiddenId.value + "/update"]: mdToday
+                        , [meHiddenId.value + "/user"]: firebase.auth().currentUser.email
                     });
                 }
-                // update data
-                refdbproduk.update({
-                    [meHiddenId + "/nama"]: meInputNama.value.toUpperCase()
-                    , [meHiddenId + "/stok"]: mStok
-                    , [meHiddenId + "/updatestok"]: mUpdatestok
-                    , [meHiddenId + "/beli"]: mBeli
-                    , [meHiddenId + "/harga"]: mHarga
-                    , [meHiddenId + "/het"]: mHet
-                    , [meHiddenId + "/update"]: update
-                    , [meHiddenId + "/lokasi"]: meInputLokasi
-                    , [meHiddenId + "/user"]: firebase.auth().currentUser.email
-                });
+                if (meInputLokasi.value.length > 0 && meInputLokasi.value != mLokasi) {
+                    // update lokasi
+                    refdbproduk.update({
+                        [meHiddenId.value + "/lokasi"]: meInputLokasi.value
+                        , [meHiddenId.value + "/update"]: mdToday
+                        , [meHiddenId.value + "/user"]: firebase.auth().currentUser.email
+                    });
+                }
             }
             alert("perubahan telah tersimpan");
         }
@@ -320,7 +327,7 @@
             for (var i in mProdukDb) {
                 if (mProdukDb[i]["id"] == lid) {
                     meHiddenId.value = mProdukDb[i]["id"];
-                    meInputNama.value = mProdukDb[i]["nama"];
+                    meInputNama.value = mProdukDb[i]["nama"];                    
                     meInputLokasi.value = mProdukDb[i]["lokasi"];
                     meInputHarga.value = mProdukDb[i]["harga"];
                     mBeli = mProdukDb[i]["beli"];
@@ -328,7 +335,10 @@
                     mHet = mProdukDb[i]["het"];
                     mStok = mProdukDb[i]["stok"];
                     mUpdatestok = mProdukDb[i]["updatestok"];
-                    mUupdate = mProdukDb[i]["update"];
+                    mUpdate = mProdukDb[i]["update"];
+                    mLokasi = mProdukDb[i]["lokasi"];
+                    if(mUpdate == mdToday) meInputNama.style.backgroundColor = 'lightgreen';
+                    else meInputNama.style.backgroundColor = meInputHarga.style.backgroundColor;
                 }
             }
         }

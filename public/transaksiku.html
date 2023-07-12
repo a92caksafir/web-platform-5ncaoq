@@ -63,6 +63,7 @@
             <button type="button" class="btn btn-default" onclick="transaksiOnClick()" id="btnTransaksi"
                 style="float: right;">Kembali</button>
             <div class="table-responsive" id="tableProduk"></div>
+            <button type="button" class="btn btn-default" onclick="btnTambahpOnClick()" id="btnTambahp">Tambah</button>
         </form>
         <form id="formEdit" class="form-horizontal" style="display: none;">
             <div class="form-group">
@@ -109,6 +110,78 @@
             <button type="button" class="btn btn-default" onclick="btnKembaliOnClick()" id="btnKembali"
                 style="float: right;">Kembali</button>
         </form>
+        <form id="formEditp" class="form-horizontal" style="display: none;">
+            <div class="form-group">
+                <input type="hidden" class="form-control" id="hiddenIdp">
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="inputNamap">Nama:</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="inputNamap" style="text-transform:uppercase">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="inputStokp">Stok:</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="inputStokp">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="inputUpdatestokp">Update Stok:</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="inputUpdatestokp" readonly>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="inputBelip">Beli:</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="inputBelip">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="inputHargap">Jual:</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="inputHargap">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="inputHetp">Het:</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="inputHetp">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="inputUpdatep">Update Harga:</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="inputUpdatep" readonly>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="inputLokasip">Lokasi:</label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="inputLokasip" style="text-transform:uppercase">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-10">
+                    <button type="button" class="btn btn-default" onclick="btnSimpanpOnClick()" id="btnSimpanp"><span
+                            class="glyphicon glyphicon-ok"></span></button>
+                    <button type="button" class="btn btn-default" onclick="btnKopipOnClick()" id="btnKopip"><span
+                            class="glyphicon glyphicon-duplicate"></button>
+                    <button type="button" class="btn btn-default" onclick="btnKembaliOnClick()" id="btnBatalp"
+                        style="float: right;">Kembali</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-10 table-responsive">
+                    <table class="table table-bordered table-striped" id="tableRiwayat" style="display: none;">
+                    </table>
+                </div>
+            </div>
+        </form>
+
     </div>
 
     <script>
@@ -146,6 +219,20 @@
         let meBtnBatal = document.getElementById("btnBatal");
         let meBtnKembali = document.getElementById("btnKembali");
 
+        let meFormEditp = document.getElementById("formEditp");
+        let meHiddenIdp = document.getElementById("hiddenIdp");
+        let meInputNamap = document.getElementById("inputNamap");
+        let meInputStokp = document.getElementById("inputStokp");
+        let meInputUpdatestokp = document.getElementById("inputUpdatestokp");
+        let meInputBelip = document.getElementById("inputBelip");
+        let meInputHargap = document.getElementById("inputHargap");
+        let meInputHetp = document.getElementById("inputHetp");
+        let meInputUpdatep = document.getElementById("inputUpdatep");
+        let meInputLokasip = document.getElementById("inputLokasip");
+        let meBtnSimpanp = document.getElementById("btnSimpanp");
+        let meBtnKopip = document.getElementById("btnKopip");
+        let meBtnBatalp = document.getElementById("btnBatalp");
+
         let meFormTransaksi = document.getElementById("formTransaksi");
         let meTableTransaksi = document.getElementById("tableTransaksi");
         let meInputGrandTotal = document.getElementById("inputGrandTotal");
@@ -178,6 +265,12 @@
             meInputTotal.value = formatRupiah(lTotal.toString());
         });
 
+        $("#inputHarga").bind('keyup mouseup', function () {
+            let lHarga = this.value.split('.').join('');
+            let lTotal = lHarga * meInputJumlah.value
+            meInputTotal.value = formatRupiah(lTotal.toString());
+        });
+
         meInputJumlah.addEventListener('keyup', function (e) {
 
         });
@@ -186,7 +279,134 @@
             meInputTotal.value = formatRupiah(this.value);
         });
 
+        meInputStokp.addEventListener('keyup', function (e) {
+            meInputStokp.value = formatRupiah(this.value);
+        });
+
+        meInputBelip.addEventListener('keyup', function (e) {
+            meInputBelip.value = formatRupiah(this.value);
+        });
+
+        meInputHargap.addEventListener('keyup', function (e) {
+            meInputHargap.value = formatRupiah(this.value);
+        });
+
+        meInputHetp.addEventListener('keyup', function (e) {
+            meInputHetp.value = formatRupiah(this.value);
+        });
+
+        meInputSearch.addEventListener('keyup', function (e) {
+            meInputSearch.value = removeTrailingSlash(this.value);
+        });
+
+        meInputNama.addEventListener('keyup', function (e) {
+            meInputNama.value = removeTrailingSlash(this.value);
+        });
+
+        meInputLokasi.addEventListener('keyup', function (e) {
+            meInputLokasi.value = removeTrailingSlash(this.value);
+        });
+
+        meInputNamap.addEventListener('keyup', function (e) {
+            meInputNamap.value = removeTrailingSlash(this.value);
+        });
+
+        meInputLokasip.addEventListener('keyup', function (e) {
+            meInputLokasip.value = removeTrailingSlash(this.value);
+        });
+
         // ------------------------------------------- click function --------------------------------
+
+        function btnTambahpOnClick() {
+            meHiddenIdp.value = "";
+            meInputNamap.value = meInputSearch.value;
+            meInputStokp.value = "";
+            meInputUpdatestokp.value = "";
+            meInputBelip.value = "";
+            meInputHargap.value = "";
+            meInputHetp.value = "";
+            meInputUpdatep.value = "";
+            meInputLokasip.value = "";
+            meFormSearch.style.display = "none";
+            meFormEditp.style.display = "block";
+            meBtnHapusp.disabled = true;
+            meBtnRiwayatp.disabled = true;
+            meBtnKopip.disabled = true;
+        }
+
+        function btnSimpanpOnClick() {
+            let id = meHiddenIdp.value;
+            let updatestok = mdToday;
+            let update = mdToday;
+            let refdbproduk = firebase.database().ref('/produk');
+            if (id.length > 0) {
+                // update
+                if (meInputBelip.value == mBeli && meInputHargap.value == mHarga && meInputHetp.value == mHet) {
+                    update = meInputUpdatep.value;
+                } else {
+                    // update riwayat
+                    if (typeof mBeli === "undefined") mBeli = 0;
+                    if (typeof mHarga === "undefined") mHarga = 0;
+                    if (typeof mHet === "undefined") mHet = 0;
+                    let refdbupdate = firebase.database().ref('/update/' + id);
+                    let updateday = mdyyyy + mdmm + mddd;
+                    refdbupdate.update({
+                        [updateday]: {
+                            updateday: updateday,
+                            beli: mBeli,
+                            harga: mHarga,
+                            het: mHet,
+                            update: mdToday,
+                            user: firebase.auth().currentUser.email
+                        }
+                    });
+                }
+                if (meInputStokp.value == mStok) {
+                    updatestok = meInputUpdatestokp.value;
+                }
+                // update data
+                refdbproduk.update({
+                    [id + "/nama"]: meInputNamap.value.toUpperCase()
+                    , [id + "/stok"]: meInputStokp.value
+                    , [id + "/updatestok"]: updatestok
+                    , [id + "/beli"]: meInputBelip.value
+                    , [id + "/harga"]: meInputHargap.value
+                    , [id + "/het"]: meInputHetp.value
+                    , [id + "/update"]: update
+                    , [id + "/lokasi"]: meInputLokasip.value
+                    , [id + "/user"]: firebase.auth().currentUser.email
+                });
+            } else {
+                // tambah
+                let id = meInputNamap.value.split(' ').join('').toLowerCase();
+                refdbproduk.update({
+                    [id]: {
+                        id: id,
+                        nama: meInputNamap.value.toUpperCase(),
+                        stok: meInputStokp.value,
+                        updatestok: mdToday,
+                        beli: meInputBelip.value,
+                        harga: meInputHargap.value,
+                        het: meInputHetp.value,
+                        update: mdToday,
+                        lokasi: meInputLokasip.value,
+                        user: firebase.auth().currentUser.email
+                    }
+                });
+            }
+            meFormSearch.style.display = "block";
+            meFormEdit.style.display = "none";
+            meFormEditp.style.display = "none";
+            meTableRiwayatp.style.display = "none";
+        }
+
+        function btnKopipOnClick() {
+            if (meHiddenIdp.value != "") {
+                meHiddenIdp.value = "";
+            } else {
+
+            }
+        }
 
         function btnNewOnClick() {
             moTransaksi = {};
@@ -224,17 +444,10 @@
 
         function btnSimpanOnClick() {
             let refdbproduk = firebase.database().ref('/produk');
-            // console.log("meHiddenId.value : " + meHiddenId.value);
-            // console.log("meHiddenId.value.length : " + meHiddenId.value.length);
-            // console.log("mUpdate : " + mUpdate);
-            // console.log("update : " + update);
-            // console.log("mHarga : " + mHarga);
-            // console.log("meInputHarga.value : " + meInputHarga.value);
             if (meHiddenId.value.length > 0) {
                 if (meInputHarga.value.length > 0) {
                     if (meInputHarga.value != mHarga) {
                         // update riwayat
-                        // console.log("update riwayat");
                         if (typeof mBeli === "undefined") mBeli = 0;
                         if (typeof mHarga === "undefined") mHarga = 0;
                         if (typeof mHet === "undefined") mHet = 0;
@@ -278,7 +491,8 @@
             meInputJumlah.value = "";
             meInputTotal.value = "";
             meFormEdit.style.display = "none";
-            if (meBtnUbah.disabled) {
+            meFormEditp.style.display = "none";
+            if (meFormSearch.style.display === "none") {
                 meFormSearch.style.display = "block";
             } else {
                 meFormTransaksi.style.display = "block";
@@ -305,6 +519,7 @@
             if (meFormTransaksi.style.display === "none") {
                 meFormSearch.style.display = "none";
                 meFormEdit.style.display = "none";
+                meFormEditp.style.display = "none";
                 meFormTransaksi.style.display = "block";
             } else {
                 meFormTransaksi.style.display = "none";
@@ -327,7 +542,7 @@
             for (var i in mProdukDb) {
                 if (mProdukDb[i]["id"] == lid) {
                     meHiddenId.value = mProdukDb[i]["id"];
-                    meInputNama.value = mProdukDb[i]["nama"];                    
+                    meInputNama.value = mProdukDb[i]["nama"];
                     meInputLokasi.value = mProdukDb[i]["lokasi"];
                     meInputHarga.value = mProdukDb[i]["harga"];
                     mBeli = mProdukDb[i]["beli"];
@@ -337,7 +552,7 @@
                     mUpdatestok = mProdukDb[i]["updatestok"];
                     mUpdate = mProdukDb[i]["update"];
                     mLokasi = mProdukDb[i]["lokasi"];
-                    if(mUpdate == mdToday) meInputNama.style.backgroundColor = 'lightgreen';
+                    if (mUpdate == mdToday) meInputNama.style.backgroundColor = 'lightgreen';
                     else meInputNama.style.backgroundColor = meInputHarga.style.backgroundColor;
                 }
             }
@@ -425,6 +640,10 @@
                 });
             });
         });
+
+        function removeTrailingSlash(str) {
+            return str.replace(/\/+$/, '');
+        }
 
         function formatRupiah(angka, prefix) {
             var number_string = angka.replace(/[^,\d]/g, '').toString(),

@@ -54,16 +54,21 @@
             <div class="table-responsive" id="tableTransaksi"></div>
             <button type="button" class="btn btn-default" onclick="produkOnClick()" id="btnProduk"><span
                     class="glyphicon glyphicon-plus"></span></button>
-            <button type="button" class="btn btn-default" onclick="btnNewOnClick()" id="btnNew">Selesai</button>
+            <button type="button" class="btn btn-default" onclick="btnNewOnClick()" id="btnNew"
+                style="float: right;">Selesai</button>
         </form>
         <form id="formSearch" class="form-inline" style="display: none;">
             <div class="form-group">
                 <input class="form-control" id="inputSearch" type="text" placeholder="Cari..">
+                <button type="button" class="btn btn-default" onclick="btnClearInputSearchOnClick()"
+                    id="btnClearInputSearch" style="float: right;"><span
+                        class="glyphicon glyphicon-remove"></span></button>
             </div>
             <button type="button" class="btn btn-default" onclick="transaksiOnClick()" id="btnTransaksi"
                 style="float: right;">Kembali</button>
             <div class="table-responsive" id="tableProduk"></div>
-            <button type="button" class="btn btn-default" onclick="btnTambahpOnClick()" id="btnTambahp">Tambah</button>
+            <button type="button" class="btn btn-default" onclick="btnTambahpOnClick()" id="btnTambahp"><span
+                class="glyphicon glyphicon-plus"></span></button>
         </form>
         <form id="formEdit" class="form-horizontal" style="display: none;">
             <div class="form-group">
@@ -406,6 +411,13 @@
             } else {
 
             }
+        }
+
+        function btnClearInputSearchOnClick() {
+            meInputSearch.value = "";
+            meInputSearch.focus();
+            var $rows = $('#tableProduk tr');
+            $rows.show();
         }
 
         function btnNewOnClick() {

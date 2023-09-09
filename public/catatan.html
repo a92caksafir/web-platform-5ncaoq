@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Catatan</title>
+
+  <!-- update the version number as needed -->
+  <script defer src="/__/firebase/9.6.10/firebase-app-compat.js"></script>
+
+  <!-- include only the Firebase features as you need -->
+  <script defer src="/__/firebase/9.6.10/firebase-auth-compat.js"></script>
+  <script defer src="/__/firebase/9.6.10/firebase-database-compat.js"></script>
+  <!-- 
+      initialize the SDK after all desired features are loaded, set useEmulator to false
+      to avoid connecting the SDK to running emulators.
+    -->
+  <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+</head>
+
+<!-- --------------------------------------------------------------------------------------------- -->
+
+<body>
+  <div class="container" id="signincontainer">
+    <button disabled type="button" class="btn btn-default" id="btnSignin" style="float: right;">Sign in with
+      Google</button>
+  </div>
+  <div class="container" id="maincontainer" style="display: none;">
+    <form id="formSearch" class="form-inline">
+      <br />
+      <div class="form-group">
+        <input class="form-control" id="search" type="text" style="text-transform:uppercase" placeholder="CARI..">
+      </div>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped" id="table">
+        </table>
+      </div>
+      <button type="button" class="btn btn-default" onclick="btnTambahOnClick()" id="btnTambah"><span
+          class="glyphicon glyphicon-plus"></span></button>
+      <button type="button" class="btn btn-default" onclick="btnBackupOnClick()" id="btnBackup">Backup</button>
+    </form>
+    <form class="form-horizontal" id="formEdit" style="display: none;">
+      <div class="form-group">
+        <input type="hidden" class="form-control" id="id">
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="nama">Distributor:</label>
+        <div class="col-sm-10">
+          <input class="form-control" id="nama" style="text-transform:uppercase">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="beli">Beli:</label>
+        <div class="col-sm-10">
+          <textarea class="form-control" rows="5" id="beli"></textarea>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="update">Update:</label>
+        <div class="col-sm-10">
+          <input class="form-control" id="update" readonly>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-10">
+          <button type="button" class="btn btn-default" onclick="btnSimpanOnClick()" id="btnSimpan"><span
+              class="glyphicon glyphicon-ok"></span></button>
+          <button type="button" class="btn btn-default" onclick="btnHapusOnClick()" id="btnHapus"><span
+              class="glyphicon glyphicon-trash"></span></button>
+          <button type="button" class="btn btn-default" onclick="toggleSearch()" id="btnBatal"
+            style="float: right;">Kembali</button>
+        </div>
+      </div>
+    </form>
+
+  </div>
+  <div class="container" id="debugcontainer" style="display: none; color:white;">
+    <h2>Debug</h2>
+    <form class="form-inline">
+      <p id="load">Firebase SDK Loading&hellip;</p>
+      <p id="jumlah"></p>
+      <p id="debug"></p>
+      <div class="quickstart-user-details-container">
+        <div>Firebase auth object value:</div>
+        <div id="quickstart-account-details">null</div>
+        <div>Google OAuth Access Token:</div>
+        <div id="quickstart-oauthtoken">null</div>
+      </div>
+    </form>
+  </div>
+  <br />
+  <br />
+  <!-- --------------------------------------------------------------------------------------------- -->
+
+  <script>
+    // --------------------------------variable--------------------------------
+
+    let txtCari = document.getElementById('search');
+    let txtId = document.getElementById('id');
+    let txtNama = document.getElementById('nama');
+    let txtBeli = document.getElementById('beli');
+    let txtUpdate = document.getElementById('update');
+    let mDb = {};
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const loadEl = document.querySelector('#load');
+      try {
+        let app = firebase.app();
+        let features = [
+          'auth',
+          'database',
+        ].filter(feature => typeof app[feature] === 'function');
+        loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
+      } catch (e) {
+        console.error(e);
+        loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
+      }
+
+      // #################### mylogic ##########################
+
+      if (!firebase.auth().currentUser) {
+        // Get the data on a post that has changed
+        firebase.database().ref('/catatan').on('child_changed', (snapshot) => {
+          $changedPost = snapshot.val();
+          for (let i in mDb) {
+            if (mDb[i]["id"] == $changedPost.id) {
+              mDb[i]["nama"] = $changedPost.nama;
+              mDb[i]["beli"] = $changedPost.beli;
+              mDb[i]["update"] = $changedPost.update;
+            }
+          }
+          generateTable(mDb);
+        });
+
+        // child_added
+        firebase.database().ref('/catatan').on('child_added', (snapshot) => {
+          mDb = Object.assign(mDb, {
+            [snapshot.val().id]: {
+              "id": snapshot.val().id,
+              "nama": snapshot.val().nama,
+              "beli": snapshot.val().beli,
+              "update": snapshot.val().update,
+            }
+          });
+          generateTable(mDb);
+        });
+
+        // child_removed
+        firebase.database().ref('/catatan').on('child_removed', (snapshot) => {
+          for (var i in mDb) {
+            if (mDb[i]["id"] == snapshot.val().id) {
+              delete mDb[i];
+            }
+          }
+          generateTable(mDb);
+        });
+      }
+    });
+
+    txtCari.addEventListener('keyup', function (e) {
+      txtCari.value = removeTrailingSlash(this.value);
+    });
+
+    txtNama.addEventListener('keyup', function (e) {
+      txtNama.value = removeTrailingSlash(this.value);
+    });
+
+    txtBeli.addEventListener('keyup', function (e) {
+      txtBeli.value = removeTrailingSlash(this.value);
+    });
+
+    $(document).ready(function () {
+      $("#search").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#myTable tr").filter(function () {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+
+    function removeTrailingSlash(str) {
+      return str.replace(/\/+$/, '');
+    }
+
+    function generateTable(db) {
+      text = "<table class='table table-bordered table-striped'>";
+      text += "<tr><th onclick='sortTable(0)'>Tgl</th><th onclick='sortNumTable(1)'>Nama</th><th onclick='sortNumTable(2)'>Catatan</th></tr></thead>";
+      text += "<tbody id='myTable'>";
+      for (x in db) {
+        text += "<tr>";
+        text += "<td onclick=tableonclick('" + db[x].id + "')>" + db[x].update + "</td>";
+        text += "<td onclick=tableonclick('" + db[x].id + "')>" + db[x].nama + "</td>";
+        text += "<td onclick=tableonclick('" + db[x].id + "')>" + db[x].beli + "</td>";
+        text += "</tr>";
+      }
+      text += "</tbody>"
+      text += "</table>"
+      document.getElementById("table").innerHTML = text;
+    }
+
+    function tableonclick(id) {
+      document.getElementById("formEdit").style.display = "block";
+      cari(id);
+      toggleSearch();
+      document.getElementById("btnHapus").disabled = false;
+    }
+
+    function btnSimpanOnClick() {
+      let id = txtId.value;
+      let today = new Date();
+      let dd = String(today.getDate()).padStart(2, '0');
+      let mm = String(today.getMonth() + 1).padStart(2, '0');
+      let yyyy = today.getFullYear();
+      today = dd + '-' + mm + '-' + yyyy;
+      let refdbcatatan = firebase.database().ref('/catatan');
+      if (id.length > 0) {
+        // update
+        refdbcatatan.update({
+          [id + "/nama"]: txtNama.value.toUpperCase()
+          , [id + "/beli"]: txtBeli.value
+          , [id + "/update"]: today
+          , [id + "/user"]: firebase.auth().currentUser.email
+        });
+      } else {
+        // tambah
+        var newPostKey = firebase.database().ref().push().key;
+        refdbcatatan.update({
+          [newPostKey]: {
+            id: newPostKey,
+            nama: txtNama.value.toUpperCase(),
+            beli: txtBeli.value,
+            update: today,
+            user: firebase.auth().currentUser.email
+          }
+        });
+      }
+      document.getElementById("formSearch").style.display = "block";
+      document.getElementById("formEdit").style.display = "none";
+    }
+
+    function btnTambahOnClick() {
+      txtId.value = "";
+      txtNama.value = txtCari.value;
+      txtBeli.value = "";
+      txtUpdate.value = "";
+      document.getElementById("formSearch").style.display = "none";
+      document.getElementById("formEdit").style.display = "block";
+      document.getElementById("btnHapus").disabled = true;
+    }
+
+    function btnHapusOnClick() {
+      if (confirm("Hapus " + txtNama.value + " ?")) {
+        let id = txtId.value;
+        let refdbcatatan = firebase.database().ref('/catatan');
+        refdbcatatan.child(id).remove();
+
+        document.getElementById("formSearch").style.display = "block";
+        document.getElementById("formEdit").style.display = "none";
+      }
+    }
+
+    function cariDb(key) {
+      let dbRef = firebase.database().ref('/catatan')
+      dbRef.child(key).get().then((snapshot) => {
+        if (snapshot.exists()) {
+          console.log(snapshot.val());
+        } else {
+          console.log("Data tidak ditemukan");
+        }
+      }).catch((error) => {
+        console.error(error);
+      });
+    }
+
+    function cari(searchVal) {
+      txtId.value = "";
+      txtNama.value = "";
+      txtBeli.value = "";
+      txtUpdate.value = "";
+      for (var i in mDb) {
+        if (mDb[i]["id"] == searchVal) {
+          txtId.value = mDb[i]["id"];
+          txtNama.value = mDb[i]["nama"];
+          txtBeli.value = mDb[i]["beli"];
+          txtUpdate.value = mDb[i]["update"];
+        }
+      }
+    }
+
+    function toggleSearch() {
+      let x = document.getElementById("formSearch");
+      if (x.style.display === "none") {
+        x.style.display = "block";
+        document.getElementById("formEdit").style.display = "none";
+      } else {
+        x.style.display = "none";
+      }
+    }
+
+    function toggleSignIn() {
+      if (!firebase.auth().currentUser) {
+        var provider = new firebase.auth.GoogleAuthProvider();
+        provider.addScope('https://www.googleapis.com/auth/plus.login');
+        firebase.auth().signInWithRedirect(provider);
+      } else {
+        firebase.auth().signOut();
+      }
+      document.getElementById('btnSignin').disabled = true;
+    }
+
+    function initApp() {
+      // Result from Redirect auth flow.
+      firebase.auth().getRedirectResult().then(function (result) {
+        if (result.credential) {
+          // This gives you a Google Access Token. You can use it to access the Google API.
+          var token = result.credential.accessToken;
+          document.getElementById('quickstart-oauthtoken').textContent = token;
+        } else {
+          document.getElementById('quickstart-oauthtoken').textContent = 'null';
+        }
+        // The signed-in user info.
+        var user = result.user;
+      }).catch(function (error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // The email of the user's account used.
+        var email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        var credential = error.credential;
+        if (errorCode === 'auth/account-exists-with-different-credential') {
+          alert('You have already signed up with a different auth provider for that email.');
+          // If you are using multiple auth providers on your app you should handle linking
+          // the user's accounts here.
+        } else {
+          console.error(error);
+        }
+      });
+
+      // Listening for auth state changes.
+      firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+          // User is signed in.
+          var displayName = user.displayName;
+          document.getElementById('btnSignin').textContent = 'Sign out ' + user.email;
+          document.getElementById('quickstart-account-details').textContent = JSON.stringify(user, null, '  ');
+          document.getElementById('maincontainer').style.display = "block"
+        } else {
+          // User is signed out.
+          document.getElementById('btnSignin').textContent = 'Sign in with Google';
+          document.getElementById('quickstart-account-details').textContent = 'null';
+          document.getElementById('quickstart-oauthtoken').textContent = 'null';
+          document.getElementById('maincontainer').style.display = "none"
+        }
+        document.getElementById('btnSignin').disabled = false;
+      });
+
+      document.getElementById('btnSignin').addEventListener('click', toggleSignIn, false);
+    }
+
+    window.onload = function () {
+      initApp();
+    };
+
+    function sortTable(n) {
+      var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+      table = document.getElementById("table");
+      switching = true;
+      //Set the sorting direction to ascending:
+      dir = "asc";
+      /*Make a loop that will continue until
+      no switching has been done:*/
+      while (switching) {
+        //start by saying: no switching is done:
+        switching = false;
+        rows = table.rows;
+        /*Loop through all table rows (except the
+        first, which contains table headers):*/
+        for (i = 1; i < (rows.length - 1); i++) {
+          //start by saying there should be no switching:
+          shouldSwitch = false;
+          /*Get the two elements you want to compare,
+          one from current row and one from the next:*/
+          x = rows[i].getElementsByTagName("TD")[n];
+          y = rows[i + 1].getElementsByTagName("TD")[n];
+          /*check if the two rows should switch place,
+          based on the direction, asc or desc:*/
+          if (dir == "asc") {
+            if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+              //if so, mark as a switch and break the loop:
+              shouldSwitch = true;
+              break;
+            }
+          } else if (dir == "desc") {
+            if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+              //if so, mark as a switch and break the loop:
+              shouldSwitch = true;
+              break;
+            }
+          }
+        }
+        if (shouldSwitch) {
+          /*If a switch has been marked, make the switch
+          and mark that a switch has been done:*/
+          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+          switching = true;
+          //Each time a switch is done, increase this count by 1:
+          switchcount++;
+        } else {
+          /*If no switching has been done AND the direction is "asc",
+          set the direction to "desc" and run the while loop again.*/
+          if (switchcount == 0 && dir == "asc") {
+            dir = "desc";
+            switching = true;
+          }
+        }
+      }
+    }
+
+    function sortNumTable(n) {
+      var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+      table = document.getElementById("table");
+      switching = true;
+      //Set the sorting direction to ascending:
+      dir = "asc";
+      /*Make a loop that will continue until
+      no switching has been done:*/
+      while (switching) {
+        //start by saying: no switching is done:
+        switching = false;
+        rows = table.rows;
+        /*Loop through all table rows (except the
+        first, which contains table headers):*/
+        for (i = 1; i < (rows.length - 1); i++) {
+          //start by saying there should be no switching:
+          shouldSwitch = false;
+          /*Get the two elements you want to compare,
+          one from current row and one from the next:*/
+          x = rows[i].getElementsByTagName("TD")[n];
+          y = rows[i + 1].getElementsByTagName("TD")[n];
+          /*check if the two rows should switch place,
+          based on the direction, asc or desc:*/
+          if (dir == "asc") {
+            if (Number(x.innerHTML) > Number(y.innerHTML)) {
+              //if so, mark as a switch and break the loop:
+              shouldSwitch = true;
+              break;
+            }
+          } else if (dir == "desc") {
+            if (Number(x.innerHTML) < Number(y.innerHTML)) {
+              //if so, mark as a switch and break the loop:
+              shouldSwitch = true;
+              break;
+            }
+          }
+        }
+        if (shouldSwitch) {
+          /*If a switch has been marked, make the switch
+          and mark that a switch has been done:*/
+          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+          switching = true;
+          //Each time a switch is done, increase this count by 1:
+          switchcount++;
+        } else {
+          /*If no switching has been done AND the direction is "asc",
+          set the direction to "desc" and run the while loop again.*/
+          if (switchcount == 0 && dir == "asc") {
+            dir = "desc";
+            switching = true;
+          }
+        }
+      }
+    }
+
+    function btnBackupOnClick(fileName) {
+      var a = document.createElement("a");
+      var file = new Blob([JSON.stringify(mDb, null, 2)], { type: 'application/json' });
+      a.href = URL.createObjectURL(file);
+      a.download = 'catatanOli.json';
+      a.click();
+      URL.revokeObjectURL(a.href)
+    }
+
+  </script>
+</body>
+
+</html>

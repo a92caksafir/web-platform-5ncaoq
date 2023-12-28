@@ -54,6 +54,8 @@
             <div class="table-responsive" id="tableTransaksi"></div>
             <button type="button" class="btn btn-default" onclick="produkOnClick()" id="btnProduk"><span
                     class="glyphicon glyphicon-plus"></span></button>
+            <button type="button" class="btn btn-default" onclick="noProdukOnClick()" id="btnNoProduk"><span
+                    class="glyphicon glyphicon-question-sign"></span></button>
             <button type="button" class="btn btn-default" onclick="btnNewOnClick()" id="btnNew"
                 style="float: right;">Selesai</button>
         </form>
@@ -159,12 +161,6 @@
             <div class="form-group">
                 <input type="hidden" class="form-control" id="hiddenIdp">
             </div>
-            <!-- <div class="input-group">
-                <div class="input-group-btn">
-                    <button type="button" class="btn btn-default">Nama</button>
-                </div>
-                <input class="form-control" id="inputNama" style="text-transform:uppercase">
-            </div> -->
             <div class="input-group">
                 <div class="input-group-btn">
                     <button type="button" class="btn btn-default">Nama</button>
@@ -589,6 +585,10 @@
             }
         }
 
+        function noProdukOnClick() {
+            alert(genRandonString(4));
+        }
+
         function transaksiOnClick() {
             if (meFormTransaksi.style.display === "none") {
                 meFormSearch.style.display = "none";
@@ -810,6 +810,16 @@
                     moTransaksi1 = moTransaksi;
                     break;
             }
+        }
+
+        function genRandonString(length) {
+            var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            var charLength = chars.length;
+            var result = '';
+            for (var i = 0; i < length; i++) {
+                result += chars.charAt(Math.floor(Math.random() * charLength));
+            }
+            return result;
         }
 
         function toggleSignIn() {

@@ -30,7 +30,7 @@
             Google</button>
     </div>
     <div class="container" id="maincontainer" style="display: none;">
-        <h4 onclick=transaksiOnClick()>Transaksi</h4>
+        <h5 id="meH4Transaksyt" onclick=transaksiOnClick()>Transaksi</h5>
         <form id="formLubang" class="form-inline">
             <div class="form-check">
                 <input type="radio" class="form-check-input" onclick="radiol5OnClick()" id="radiol5" name="lubang"
@@ -54,6 +54,8 @@
             <div class="table-responsive" id="tableTransaksi"></div>
             <button type="button" class="btn btn-default" onclick="produkOnClick()" id="btnProduk"><span
                     class="glyphicon glyphicon-plus"></span></button>
+            <button type="button" class="btn btn-default" onclick="noProdukOnClick()" id="btnNoProduk"><span
+                    class="glyphicon glyphicon-question-sign"></span></button>
             <button type="button" class="btn btn-default" onclick="btnNewOnClick()" id="btnNew"
                 style="float: right;">Selesai</button>
         </form>
@@ -66,7 +68,7 @@
                     </button>
                 </div>
             </div>
-            <button type="button" class="btn btn-default" onclick="transaksiOnClick()" id="btnTransaksi" 
+            <button type="button" class="btn btn-default" onclick="transaksiOnClick()" id="btnTransaksi"
                 style="float: right;">Kembali</button>
             <div class="table-responsive" id="tableProduk"></div>
             <button type="button" class="btn btn-default" onclick="btnTambahpOnClick()" id="btnTambahp"><span
@@ -76,35 +78,73 @@
             <div class="form-group">
                 <input type="hidden" class="form-control" id="id">
             </div>
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <label class="control-label col-sm-2" for="inputNama">Nama:</label>
                 <div class="col-sm-10">
                     <input readonly class="form-control" id="inputNama" style="text-transform:uppercase">
                 </div>
+            </div> -->
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default">Nama</button>
+                </div>
+                <input class="form-control" id="inputNama" style="text-transform:uppercase">
             </div>
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <label class="control-label col-sm-2" for="inputLokasi">Lokasi:</label>
                 <div class="col-sm-10">
                     <input class="form-control" id="inputLokasi" style="text-transform:uppercase">
                 </div>
+            </div> -->
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default">Lokasi</button>
+                </div>
+                <input class="form-control" id="inputLokasi" style="text-transform:uppercase">
             </div>
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <label class="control-label col-sm-2" for="inputHarga">Harga:</label>
                 <div class="col-sm-10">
                     <input class="form-control" id="inputHarga" style="text-transform:uppercase">
                 </div>
+            </div> -->
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default">Harga</button>
+                </div>
+                <input class="form-control" id="inputHarga" style="text-transform:uppercase">
             </div>
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <label class="control-label col-sm-2" for="inputJumlah">Jumlah:</label>
                 <div class="col-sm-10">
                     <input class="form-control" id="inputJumlah" style="text-transform:uppercase">
                 </div>
+            </div> -->
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default" onclick="$('#meInputJumlah').val('0')">Jumlah</button>
+                </div>
+                <input class="form-control" id="inputJumlah" style="text-transform:uppercase">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default" onclick="btnIncrementClick()"><span
+                            class="glyphicon glyphicon-plus"></span></button>
+                </div>
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default" onclick="btnDecrementClick()"><span
+                            class="glyphicon glyphicon-minus"></span></button>
+                </div>
             </div>
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <label class="control-label col-sm-2" for="inputTotal">Total:</label>
                 <div class="col-sm-10">
                     <input class="form-control" id="inputTotal" style="text-transform:uppercase">
                 </div>
+            </div> -->
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default">Total</button>
+                </div>
+                <input class="form-control" id="inputTotal" style="text-transform:uppercase">
             </div>
             <button type="button" class="btn btn-default" onclick="btnTambahOnClick()" id="btnTambah"><span
                     class="glyphicon glyphicon-plus"></span></button>
@@ -121,53 +161,53 @@
             <div class="form-group">
                 <input type="hidden" class="form-control" id="hiddenIdp">
             </div>
-            <div class="form-group">
-                <label class="control-label col-sm-2" for="inputNamap">Nama:</label>
-                <div class="col-sm-10">
-                    <input class="form-control" id="inputNamap" style="text-transform:uppercase">
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default">Nama</button>
                 </div>
+                <input class="form-control" id="inputNamap" style="text-transform:uppercase">
             </div>
-            <div class="form-group">
-                <label class="control-label col-sm-2" for="inputStokp">Stok:</label>
-                <div class="col-sm-10">
-                    <input class="form-control" id="inputStokp">
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default">Stok</button>
                 </div>
+                <input class="form-control" id="inputStokp">
             </div>
-            <div class="form-group">
-                <label class="control-label col-sm-2" for="inputUpdatestokp">Update Stok:</label>
-                <div class="col-sm-10">
-                    <input class="form-control" id="inputUpdatestokp" readonly>
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default">Update Stok</button>
                 </div>
+                <input class="form-control" id="inputUpdatestokp" readonly>
             </div>
-            <div class="form-group">
-                <label class="control-label col-sm-2" for="inputBelip">Beli:</label>
-                <div class="col-sm-10">
-                    <input class="form-control" id="inputBelip">
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default">Beli</button>
                 </div>
+                <input class="form-control" id="inputBelip">
             </div>
-            <div class="form-group">
-                <label class="control-label col-sm-2" for="inputHargap">Jual:</label>
-                <div class="col-sm-10">
-                    <input class="form-control" id="inputHargap">
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default">Jual</button>
                 </div>
+                <input class="form-control" id="inputHargap">
             </div>
-            <div class="form-group">
-                <label class="control-label col-sm-2" for="inputHetp">Het:</label>
-                <div class="col-sm-10">
-                    <input class="form-control" id="inputHetp">
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default">Het</button>
                 </div>
+                <input class="form-control" id="inputHetp">
             </div>
-            <div class="form-group">
-                <label class="control-label col-sm-2" for="inputUpdatep">Update Harga:</label>
-                <div class="col-sm-10">
-                    <input class="form-control" id="inputUpdatep" readonly>
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default">Update Harga</button>
                 </div>
+                <input class="form-control" id="inputUpdatep" readonly>
             </div>
-            <div class="form-group">
-                <label class="control-label col-sm-2" for="inputLokasip">Lokasi:</label>
-                <div class="col-sm-10">
-                    <input class="form-control" id="inputLokasip" style="text-transform:uppercase">
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default">Lokasi</button>
                 </div>
+                <input class="form-control" id="inputLokasip" style="text-transform:uppercase">
             </div>
             <div class="form-group">
                 <div class="col-sm-2"></div>
@@ -204,6 +244,7 @@
         let moTransaksi1 = {};
         let moTransaksiLubang = 5;
 
+        let meH4Transaksyt = document.getElementById("meH4Transaksyt");
         let meRadioL5 = document.getElementById("radiol5");
         let meRadioL4 = document.getElementById("radiol4");
         let meRadioL3 = document.getElementById("radiol3");
@@ -260,6 +301,7 @@
         let mdmm = String(mdToday.getMonth() + 1).padStart(2, '0'); //January is 0!
         let mdyyyy = mdToday.getFullYear();
         mdToday = mddd + '-' + mdmm + '-' + mdyyyy;
+        meH4Transaksyt.innerHTML = "Transaksi Tgl " + mdToday
         // ------------------------------------------- logic --------------------------------
 
         generateTableTransaksi(moTransaksi);
@@ -267,9 +309,7 @@
         // ------------------------------------------- even --------------------------------
 
         $("#inputJumlah").bind('keyup mouseup', function () {
-            let lHarga = meInputHarga.value.split('.').join('');
-            let lTotal = lHarga * this.value
-            meInputTotal.value = formatRupiah(lTotal.toString());
+            hitungHarga();
         });
 
         $("#inputHarga").bind('keyup mouseup', function () {
@@ -323,6 +363,22 @@
         });
 
         // ------------------------------------------- click function --------------------------------
+
+        function btnIncrementClick() {
+            let liNum = parseInt(meInputJumlah.value);
+            liNum = isNaN(liNum) ? 0 : liNum;
+            liNum++;
+            meInputJumlah.value = liNum;
+            hitungHarga();
+        }
+
+        function btnDecrementClick() {
+            let liNum = parseInt(meInputJumlah.value);
+            liNum = isNaN(liNum) ? 0 : liNum;
+            liNum--;
+            meInputJumlah.value = liNum;
+            hitungHarga();
+        }
 
         function btnTambahpOnClick() {
             meHiddenIdp.value = "";
@@ -529,6 +585,10 @@
             }
         }
 
+        function noProdukOnClick() {
+            alert(genRandonString(4));
+        }
+
         function transaksiOnClick() {
             if (meFormTransaksi.style.display === "none") {
                 meFormSearch.style.display = "none";
@@ -551,7 +611,7 @@
             meInputNama.value = "";
             meInputLokasi.value = "";
             meInputHarga.value = "";
-            meInputJumlah.value = "";
+            meInputJumlah.value = "0";
             meInputTotal.value = "";
             for (var i in mProdukDb) {
                 if (mProdukDb[i]["id"] == lid) {
@@ -655,6 +715,12 @@
             });
         });
 
+        function hitungHarga() {
+            let lHarga = meInputHarga.value.split('.').join('');
+            let lTotal = lHarga * meInputJumlah.value;
+            meInputTotal.value = formatRupiah(lTotal.toString());
+        }
+
         function removeTrailingSlash(str) {
             return str.replace(/\/+$/, '');
         }
@@ -744,6 +810,16 @@
                     moTransaksi1 = moTransaksi;
                     break;
             }
+        }
+
+        function genRandonString(length) {
+            var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            var charLength = chars.length;
+            var result = '';
+            for (var i = 0; i < length; i++) {
+                result += chars.charAt(Math.floor(Math.random() * charLength));
+            }
+            return result;
         }
 
         function toggleSignIn() {

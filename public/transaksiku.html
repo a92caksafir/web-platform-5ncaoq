@@ -228,7 +228,35 @@
                 </div>
             </div>
         </form>
-
+        <div id="divkode"  style="display: none;">
+            <div class="table-responsive" id="tableKode"></div>
+            <table class='table table-bordered table-striped'>
+                </thead>
+                <tr>
+                    <th>C</th>
+                    <th>D</th>
+                    <th>E</th>
+                    <th>F</th>
+                    <th>G</th>
+                    <th>H</th>
+                    <th>I</th>
+                    <th>J</th>
+                </tr>
+                </thead>
+                <tbody id='myTable'>
+                    <tr>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>4</td>
+                        <td>5</td>
+                        <td>6</td>
+                        <td>7</td>
+                        <td>8</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script>
@@ -250,6 +278,7 @@
         let meRadioL3 = document.getElementById("radiol3");
         let meRadioL2 = document.getElementById("radiol2");
         let meRadioL1 = document.getElementById("radiol1");
+        let meDivKode = document.getElementById("divkode");
 
         let meFormSearch = document.getElementById("formSearch");
         let meInputSearch = document.getElementById("inputSearch");
@@ -586,7 +615,12 @@
         }
 
         function noProdukOnClick() {
-            alert(genRandonString(4));
+            // alert(genRandonString(4));
+            if (meDivKode.style.display === "none") {
+                meDivKode.style.display = "block";
+            } else {
+                meDivKode.style.display = "none";
+            }
         }
 
         function transaksiOnClick() {

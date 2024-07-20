@@ -56,8 +56,10 @@
                     class="glyphicon glyphicon-plus"></span></button>
             <button type="button" class="btn btn-default" onclick="noProdukOnClick()" id="btnNoProduk"><span
                     class="glyphicon glyphicon-question-sign"></span></button>
+            <button type="button" class="btn btn-default" onclick="btnCancelTransOnClick()" id="btnCancelTrans"><span
+                    class="glyphicon glyphicon-remove"></button>
             <button type="button" class="btn btn-default" onclick="btnNewOnClick()" id="btnNew"
-                style="float: right;">Selesai</button>
+                style="float: right;"><span class="glyphicon glyphicon-ok"></span></button>
         </form>
         <form id="formSearch" class="form-inline" style="display: none;">
             <div class="input-group">
@@ -78,48 +80,24 @@
             <div class="form-group">
                 <input type="hidden" class="form-control" id="id">
             </div>
-            <!-- <div class="form-group">
-                <label class="control-label col-sm-2" for="inputNama">Nama:</label>
-                <div class="col-sm-10">
-                    <input readonly class="form-control" id="inputNama" style="text-transform:uppercase">
-                </div>
-            </div> -->
             <div class="input-group">
                 <div class="input-group-btn">
                     <button type="button" class="btn btn-default">Nama</button>
                 </div>
                 <input class="form-control" id="inputNama" style="text-transform:uppercase">
             </div>
-            <!-- <div class="form-group">
-                <label class="control-label col-sm-2" for="inputLokasi">Lokasi:</label>
-                <div class="col-sm-10">
-                    <input class="form-control" id="inputLokasi" style="text-transform:uppercase">
-                </div>
-            </div> -->
             <div class="input-group">
                 <div class="input-group-btn">
                     <button type="button" class="btn btn-default">Lokasi</button>
                 </div>
                 <input class="form-control" id="inputLokasi" style="text-transform:uppercase">
             </div>
-            <!-- <div class="form-group">
-                <label class="control-label col-sm-2" for="inputHarga">Harga:</label>
-                <div class="col-sm-10">
-                    <input class="form-control" id="inputHarga" style="text-transform:uppercase">
-                </div>
-            </div> -->
             <div class="input-group">
                 <div class="input-group-btn">
                     <button type="button" class="btn btn-default">Harga</button>
                 </div>
                 <input class="form-control" id="inputHarga" style="text-transform:uppercase">
             </div>
-            <!-- <div class="form-group">
-                <label class="control-label col-sm-2" for="inputJumlah">Jumlah:</label>
-                <div class="col-sm-10">
-                    <input class="form-control" id="inputJumlah" style="text-transform:uppercase">
-                </div>
-            </div> -->
             <div class="input-group">
                 <div class="input-group-btn">
                     <button type="button" class="btn btn-default" onclick="$('#meInputJumlah').val('0')">Jumlah</button>
@@ -134,12 +112,6 @@
                             class="glyphicon glyphicon-minus"></span></button>
                 </div>
             </div>
-            <!-- <div class="form-group">
-                <label class="control-label col-sm-2" for="inputTotal">Total:</label>
-                <div class="col-sm-10">
-                    <input class="form-control" id="inputTotal" style="text-transform:uppercase">
-                </div>
-            </div> -->
             <div class="input-group">
                 <div class="input-group-btn">
                     <button type="button" class="btn btn-default">Total</button>
@@ -154,6 +126,8 @@
                     class="glyphicon glyphicon-remove"></button>
             <button type="button" class="btn btn-default" onclick="btnSimpanOnClick()" id="btnSimpan"><span
                     class="glyphicon glyphicon-floppy-disk"></button>
+            <button type="button" class="btn btn-default" onclick="btnKopiOnClick()" id="btnKopi"><span
+                    class="glyphicon glyphicon-duplicate"></button>
             <button type="button" class="btn btn-default" onclick="btnKembaliOnClick()" id="btnKembali"
                 style="float: right;">Kembali</button>
         </form>
@@ -209,17 +183,10 @@
                 </div>
                 <input class="form-control" id="inputLokasip" style="text-transform:uppercase">
             </div>
-            <div class="form-group">
-                <div class="col-sm-2"></div>
-                <div class="col-sm-10">
-                    <button type="button" class="btn btn-default" onclick="btnSimpanpOnClick()" id="btnSimpanp"><span
-                            class="glyphicon glyphicon-ok"></span></button>
-                    <button type="button" class="btn btn-default" onclick="btnKopipOnClick()" id="btnKopip"><span
-                            class="glyphicon glyphicon-duplicate"></button>
-                    <button type="button" class="btn btn-default" onclick="btnKembaliOnClick()" id="btnBatalp"
-                        style="float: right;">Kembali</button>
-                </div>
-            </div>
+            <button type="button" class="btn btn-default" onclick="btnSimpanpOnClick()" id="btnSimpanp"><span
+                    class="glyphicon glyphicon-ok"></span></button>
+            <button type="button" class="btn btn-default" onclick="btnKembaliOnClick()" id="btnBatalp"
+                style="float: right;">Kembali</button>
             <div class="form-group">
                 <div class="col-sm-2"></div>
                 <div class="col-sm-10 table-responsive">
@@ -228,7 +195,7 @@
                 </div>
             </div>
         </form>
-        <div id="divkode"  style="display: none;">
+        <div id="divkode" style="display: none;">
             <div class="table-responsive" id="tableKode"></div>
             <table class='table table-bordered table-striped'>
                 </thead>
@@ -241,6 +208,8 @@
                     <th>H</th>
                     <th>I</th>
                     <th>J</th>
+                    <th>K</th>
+                    <th>L</th>
                 </tr>
                 </thead>
                 <tbody id='myTable'>
@@ -253,6 +222,8 @@
                         <td>6</td>
                         <td>7</td>
                         <td>8</td>
+                        <td>9</td>
+                        <td>0</td>
                     </tr>
                 </tbody>
             </table>
@@ -492,14 +463,6 @@
             meTableRiwayatp.style.display = "none";
         }
 
-        function btnKopipOnClick() {
-            if (meHiddenIdp.value != "") {
-                meHiddenIdp.value = "";
-            } else {
-
-            }
-        }
-
         function btnClearInputSearchOnClick() {
             meInputSearch.value = "";
             meInputSearch.focus();
@@ -507,9 +470,24 @@
             $rows.show();
         }
 
+        function btnCancelTransOnClick() {
+            if (confirm("Batalkan transaksi ?")) {
+                moTransaksi = {};
+                generateTableTransaksi(moTransaksi);
+            }
+        }
+
         function btnNewOnClick() {
-            moTransaksi = {};
-            generateTableTransaksi(moTransaksi);
+            if (confirm("Transaksi selesai ?")) {
+                let refdbproduk = firebase.database().ref('/produk');
+                for (x in moTransaksi) {
+                    refdbproduk.update({
+                        [moTransaksi[x].id + "/transaksi"]: mdToday
+                    });
+                }
+                moTransaksi = {};
+                generateTableTransaksi(moTransaksi);
+            }
         }
 
         function btnTambahOnClick() {
@@ -566,6 +544,8 @@
                     // update harga
                     refdbproduk.update({
                         [meHiddenId.value + "/harga"]: meInputHarga.value
+                        , [meHiddenId.value + "/nama"]: meInputNama.value
+                        , [meHiddenId.value + "/lokasi"]: meInputLokasi.value
                         , [meHiddenId.value + "/update"]: mdToday
                         , [meHiddenId.value + "/user"]: firebase.auth().currentUser.email
                     });
@@ -580,6 +560,23 @@
                 }
             }
             alert("perubahan telah tersimpan");
+        }
+
+        function btnKopiOnClick() {
+            meHiddenIdp.value = "";
+            meInputNamap.value = meInputNama.value
+            meInputStokp.value = "";
+            meInputUpdatestokp.value = "";
+            meInputBelip.value = "";
+            meInputHargap.value = meInputHarga.value;
+            meInputHetp.value = "";
+            meInputUpdatep.value = "";
+            meInputLokasip.value = meInputLokasi.value;
+            meFormEdit.style.display = "none";
+            meFormEditp.style.display = "block";
+            meBtnHapusp.disabled = true;
+            meBtnRiwayatp.disabled = true;
+            meBtnKopip.disabled = true;
         }
 
         function btnKembaliOnClick() {
@@ -629,8 +626,6 @@
                 meFormEdit.style.display = "none";
                 meFormEditp.style.display = "none";
                 meFormTransaksi.style.display = "block";
-            } else {
-                meFormTransaksi.style.display = "none";
             }
         }
 
@@ -660,7 +655,7 @@
                     mUpdatestok = mProdukDb[i]["updatestok"];
                     mUpdate = mProdukDb[i]["update"];
                     mLokasi = mProdukDb[i]["lokasi"];
-                    if (mUpdate == mdToday) meInputNama.style.backgroundColor = 'lightgreen';
+                    if (mUpdate == mdToday || mProdukDb[i]["transaksi"] == mdToday) meInputNama.style.backgroundColor = 'lightgreen';
                     else meInputNama.style.backgroundColor = meInputHarga.style.backgroundColor;
                 }
             }
@@ -899,13 +894,14 @@
                         $changedPost = snapshot.val();
                         for (let i in mProdukDb) {
                             if (mProdukDb[i]["id"] == $changedPost.id) {
-                                mProdukDb[i]["nama"] = $changedPost.nama;
-                                mProdukDb[i]["lokasi"] = $changedPost.lokasi;
-                                mProdukDb[i]["stok"] = $changedPost.stok;
-                                mProdukDb[i]["updatestok"] = $changedPost.updatestok;
                                 mProdukDb[i]["beli"] = $changedPost.beli;
                                 mProdukDb[i]["harga"] = $changedPost.harga;
+                                mProdukDb[i]["lokasi"] = $changedPost.lokasi;
+                                mProdukDb[i]["nama"] = $changedPost.nama;
+                                mProdukDb[i]["stok"] = $changedPost.stok;
+                                mProdukDb[i]["transaksi"] = $changedPost.transaksi;
                                 mProdukDb[i]["update"] = $changedPost.update;
+                                mProdukDb[i]["updatestok"] = $changedPost.updatestok;
                             }
                         }
                         generateTableProduk(mProdukDb);
@@ -915,14 +911,15 @@
                     firebase.database().ref('/produk').on('child_added', (snapshot) => {
                         mProdukDb = Object.assign(mProdukDb, {
                             [snapshot.val().id]: {
-                                "id": snapshot.val().id,
-                                "nama": snapshot.val().nama,
-                                "lokasi": snapshot.val().lokasi,
-                                "stok": snapshot.val().stok,
-                                "updatestok": snapshot.val().updatestok,
                                 "beli": snapshot.val().beli,
                                 "harga": snapshot.val().harga,
-                                "update": snapshot.val().update
+                                "id": snapshot.val().id,
+                                "lokasi": snapshot.val().lokasi,
+                                "nama": snapshot.val().nama,
+                                "stok": snapshot.val().stok,
+                                "transaksi": snapshot.val().transaksi,
+                                "update": snapshot.val().update,
+                                "updatestok": snapshot.val().updatestok
                             }
                         });
                         generateTableProduk(mProdukDb);

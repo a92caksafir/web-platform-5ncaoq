@@ -35,19 +35,21 @@
             <div class="form-check">
                 <input type="radio" class="form-check-input" onclick="radiol5OnClick()" id="radiol5" name="lubang"
                     value="l5" checked>
-                <label class="form-check-label" for="l5">L5</label>
+                <label class="form-check-label" for="radiol5">L5</label>
                 <input type="radio" class="form-check-input" onclick="radiol4OnClick()" id="radiol4" name="lubang"
                     value="l4">
-                <label class="form-check-label" for="l4">L4</label>
+                <label class="form-check-label" for="radiol4">L4</label>
                 <input type="radio" class="form-check-input" onclick="radiol3OnClick()" id="radiol3" name="lubang"
                     value="l3">
-                <label class="form-check-label" for="l3">L3</label>
+                <label class="form-check-label" for="radiol3">L3</label>
                 <input type="radio" class="form-check-input" onclick="radiol2OnClick()" id="radiol2" name="lubang"
                     value="l2">
-                <label class="form-check-label" for="l2">L2</label>
+                <label class="form-check-label" for="radiol2">L2</label>
                 <input type="radio" class="form-check-input" onclick="radiol1OnClick()" id="radiol1" name="lubang"
                     value="l1">
-                <label class="form-check-label" for="l1">L1</label>
+                <label class="form-check-label" for="radiol1">L1</label>
+                <label class="form-check-label" for="chkPindah" style="float: right;">Pindah</label>
+                <input type="checkbox" class="form-check-input" id="chkPindah" style="float: right;"></input>
             </div>
         </form>
         <form id="formTransaksi" class="form-inline">
@@ -249,6 +251,7 @@
         let meRadioL3 = document.getElementById("radiol3");
         let meRadioL2 = document.getElementById("radiol2");
         let meRadioL1 = document.getElementById("radiol1");
+        let meChkPindah = document.getElementById("chkPindah");
         let meDivKode = document.getElementById("divkode");
 
         let meFormSearch = document.getElementById("formSearch");
@@ -687,38 +690,93 @@
         }
 
         function radiol5OnClick() {
-            switchTransaksi();
-            moTransaksi = moTransaksi5;
+            if (chkPindah.checked) {
+                alert("pindah dari lubang " + moTransaksiLubang + " ke 5 ?");
+                meChkPindah.checked = false;
+                // -----
+                moTransaksiNow = moTransaksi;
+                moTransaksi = moTransaksi5;
+                switchTransaksi();
+                moTransaksi = moTransaksiNow;
+                // -----
+            } else {
+                switchTransaksi();
+                moTransaksi = moTransaksi5;
+                generateTableTransaksi(moTransaksi);
+            }
             moTransaksiLubang = 5;
-            generateTableTransaksi(moTransaksi);
         }
 
         function radiol4OnClick() {
-            switchTransaksi();
-            moTransaksi = moTransaksi4;
+            if (chkPindah.checked) {
+                alert("pindah dari lubang " + moTransaksiLubang + " ke 4 ?");
+                meChkPindah.checked = false;
+                // -----
+                moTransaksiNow = moTransaksi;
+                moTransaksi = moTransaksi4;
+                switchTransaksi();
+                moTransaksi = moTransaksiNow;
+                // -----
+            } else {
+                switchTransaksi();
+                moTransaksi = moTransaksi4;
+                generateTableTransaksi(moTransaksi);
+            }
             moTransaksiLubang = 4;
-            generateTableTransaksi(moTransaksi);
         }
 
         function radiol3OnClick() {
-            switchTransaksi();
-            moTransaksi = moTransaksi3;
+            if (chkPindah.checked) {
+                alert("pindah dari lubang " + moTransaksiLubang + " ke 3 ?");
+                meChkPindah.checked = false;
+                // -----
+                moTransaksiNow = moTransaksi;
+                moTransaksi = moTransaksi3;
+                switchTransaksi();
+                moTransaksi = moTransaksiNow;
+                // -----
+            } else {
+                switchTransaksi();
+                moTransaksi = moTransaksi3;
+                generateTableTransaksi(moTransaksi);
+            }
             moTransaksiLubang = 3;
-            generateTableTransaksi(moTransaksi);
         }
 
         function radiol2OnClick() {
-            switchTransaksi();
-            moTransaksi = moTransaksi2;
+            if (chkPindah.checked) {
+                alert("pindah dari lubang " + moTransaksiLubang + " ke 2 ?");
+                meChkPindah.checked = false;
+                // -----
+                moTransaksiNow = moTransaksi;
+                moTransaksi = moTransaksi2;
+                switchTransaksi();
+                moTransaksi = moTransaksiNow;
+                // -----
+            } else {
+                switchTransaksi();
+                moTransaksi = moTransaksi2;
+                generateTableTransaksi(moTransaksi);
+            }
             moTransaksiLubang = 2;
-            generateTableTransaksi(moTransaksi);
         }
 
         function radiol1OnClick() {
-            switchTransaksi();
-            moTransaksi = moTransaksi1;
+            if (chkPindah.checked) {
+                alert("pindah dari lubang " + moTransaksiLubang + " ke 1 ?");
+                meChkPindah.checked = false;
+                // -----
+                moTransaksiNow = moTransaksi;
+                moTransaksi = moTransaksi1;
+                switchTransaksi();
+                moTransaksi = moTransaksiNow;
+                // -----
+            } else {
+                switchTransaksi();
+                moTransaksi = moTransaksi1;
+                generateTableTransaksi(moTransaksi);
+            }
             moTransaksiLubang = 1;
-            generateTableTransaksi(moTransaksi);
         }
 
         // ------------------------------------------- function --------------------------------

@@ -658,7 +658,7 @@
                     mUpdatestok = mProdukDb[i]["updatestok"];
                     mUpdate = mProdukDb[i]["update"];
                     mLokasi = mProdukDb[i]["lokasi"];
-                    if (mUpdate == mdToday || mProdukDb[i]["transaksi"] == mdToday) meInputNama.style.backgroundColor = 'lightgreen';
+                    if (mUpdate == mdToday || mProdukDb[i]["transaksi"] == mdToday) meInputNama.style.color = 'blue';
                     else meInputNama.style.backgroundColor = meInputHarga.style.backgroundColor;
                 }
             }
@@ -834,7 +834,8 @@
             text += "<tbody id='myTable'>";
             for (x in db) {
                 text += "<tr>";
-                text += "<td onclick=tableProdukOnClick('" + db[x].id + "')>" + db[x].nama + "</td>";
+                if (db[x].update == mdToday || db[x].transaksi == mdToday) text += "<td style='color:blue' onclick=tableProdukOnClick('" + db[x].id + "')>" + db[x].nama + "</td>";
+                else text += "<td onclick=tableProdukOnClick('" + db[x].id + "')>" + db[x].nama + "</td>";
                 text += "<td onclick=tableProdukOnClick('" + db[x].id + "')>" + db[x].stok + "</td>";
                 text += "<td onclick=tableProdukOnClick('" + db[x].id + "')>" + db[x].harga + "</td>";
                 text += "<td onclick=tableProdukOnClick('" + db[x].id + "')>" + db[x].update + "</td>";
@@ -853,7 +854,9 @@
             text += "<tbody id='myTable'>";
             for (x in db) {
                 text += "<tr>";
-                text += "<td onclick=tableTransaksiOnClick('" + db[x].id + "')>" + db[x].nama + "</td>";
+                if (db[x].update == mdToday || db[x].transaksi == mdToday) text += "<td style='color:blue' onclick=tableTransaksiOnClick('" + db[x].id + "')>" + db[x].nama + "</td>";
+                else text += "<td onclick=tableTransaksiOnClick('" + db[x].id + "')>" + db[x].update + "</td>";
+                // text += "<td onclick=tableTransaksiOnClick('" + db[x].id + "')>" + db[x].nama + "</td>";
                 text += "<td style='text-align: right' onclick=tableTransaksiOnClick('" + db[x].id + "')>" + db[x].harga + "</td>";
                 text += "<td style='text-align: right' onclick=tableTransaksiOnClick('" + db[x].id + "')>" + db[x].jumlah + "</td>";
                 text += "<td style='text-align: right' onclick=tableTransaksiOnClick('" + db[x].id + "')>" + db[x].total + "</td>";

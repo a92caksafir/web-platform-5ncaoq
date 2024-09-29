@@ -35,19 +35,21 @@
             <div class="form-check">
                 <input type="radio" class="form-check-input" onclick="radiol5OnClick()" id="radiol5" name="lubang"
                     value="l5" checked>
-                <label class="form-check-label" for="l5">L5</label>
+                <label class="form-check-label" for="radiol5">L5</label>
                 <input type="radio" class="form-check-input" onclick="radiol4OnClick()" id="radiol4" name="lubang"
                     value="l4">
-                <label class="form-check-label" for="l4">L4</label>
+                <label class="form-check-label" for="radiol4">L4</label>
                 <input type="radio" class="form-check-input" onclick="radiol3OnClick()" id="radiol3" name="lubang"
                     value="l3">
-                <label class="form-check-label" for="l3">L3</label>
+                <label class="form-check-label" for="radiol3">L3</label>
                 <input type="radio" class="form-check-input" onclick="radiol2OnClick()" id="radiol2" name="lubang"
                     value="l2">
-                <label class="form-check-label" for="l2">L2</label>
+                <label class="form-check-label" for="radiol2">L2</label>
                 <input type="radio" class="form-check-input" onclick="radiol1OnClick()" id="radiol1" name="lubang"
                     value="l1">
-                <label class="form-check-label" for="l1">L1</label>
+                <label class="form-check-label" for="radiol1">L1</label>
+                <label class="form-check-label" for="chkPindah" style="float: right;">Pindah</label>
+                <input type="checkbox" class="form-check-input" id="chkPindah" style="float: right;"></input>
             </div>
         </form>
         <form id="formTransaksi" class="form-inline">
@@ -56,8 +58,10 @@
                     class="glyphicon glyphicon-plus"></span></button>
             <button type="button" class="btn btn-default" onclick="noProdukOnClick()" id="btnNoProduk"><span
                     class="glyphicon glyphicon-question-sign"></span></button>
+            <button type="button" class="btn btn-default" onclick="btnCancelTransOnClick()" id="btnCancelTrans"><span
+                    class="glyphicon glyphicon-remove"></button>
             <button type="button" class="btn btn-default" onclick="btnNewOnClick()" id="btnNew"
-                style="float: right;">Selesai</button>
+                style="float: right;"><span class="glyphicon glyphicon-ok"></span></button>
         </form>
         <form id="formSearch" class="form-inline" style="display: none;">
             <div class="input-group">
@@ -78,48 +82,24 @@
             <div class="form-group">
                 <input type="hidden" class="form-control" id="id">
             </div>
-            <!-- <div class="form-group">
-                <label class="control-label col-sm-2" for="inputNama">Nama:</label>
-                <div class="col-sm-10">
-                    <input readonly class="form-control" id="inputNama" style="text-transform:uppercase">
-                </div>
-            </div> -->
             <div class="input-group">
                 <div class="input-group-btn">
                     <button type="button" class="btn btn-default">Nama</button>
                 </div>
                 <input class="form-control" id="inputNama" style="text-transform:uppercase">
             </div>
-            <!-- <div class="form-group">
-                <label class="control-label col-sm-2" for="inputLokasi">Lokasi:</label>
-                <div class="col-sm-10">
-                    <input class="form-control" id="inputLokasi" style="text-transform:uppercase">
-                </div>
-            </div> -->
             <div class="input-group">
                 <div class="input-group-btn">
                     <button type="button" class="btn btn-default">Lokasi</button>
                 </div>
                 <input class="form-control" id="inputLokasi" style="text-transform:uppercase">
             </div>
-            <!-- <div class="form-group">
-                <label class="control-label col-sm-2" for="inputHarga">Harga:</label>
-                <div class="col-sm-10">
-                    <input class="form-control" id="inputHarga" style="text-transform:uppercase">
-                </div>
-            </div> -->
             <div class="input-group">
                 <div class="input-group-btn">
                     <button type="button" class="btn btn-default">Harga</button>
                 </div>
                 <input class="form-control" id="inputHarga" style="text-transform:uppercase">
             </div>
-            <!-- <div class="form-group">
-                <label class="control-label col-sm-2" for="inputJumlah">Jumlah:</label>
-                <div class="col-sm-10">
-                    <input class="form-control" id="inputJumlah" style="text-transform:uppercase">
-                </div>
-            </div> -->
             <div class="input-group">
                 <div class="input-group-btn">
                     <button type="button" class="btn btn-default" onclick="$('#meInputJumlah').val('0')">Jumlah</button>
@@ -134,12 +114,6 @@
                             class="glyphicon glyphicon-minus"></span></button>
                 </div>
             </div>
-            <!-- <div class="form-group">
-                <label class="control-label col-sm-2" for="inputTotal">Total:</label>
-                <div class="col-sm-10">
-                    <input class="form-control" id="inputTotal" style="text-transform:uppercase">
-                </div>
-            </div> -->
             <div class="input-group">
                 <div class="input-group-btn">
                     <button type="button" class="btn btn-default">Total</button>
@@ -154,6 +128,8 @@
                     class="glyphicon glyphicon-remove"></button>
             <button type="button" class="btn btn-default" onclick="btnSimpanOnClick()" id="btnSimpan"><span
                     class="glyphicon glyphicon-floppy-disk"></button>
+            <button type="button" class="btn btn-default" onclick="btnKopiOnClick()" id="btnKopi"><span
+                    class="glyphicon glyphicon-duplicate"></button>
             <button type="button" class="btn btn-default" onclick="btnKembaliOnClick()" id="btnKembali"
                 style="float: right;">Kembali</button>
         </form>
@@ -209,17 +185,10 @@
                 </div>
                 <input class="form-control" id="inputLokasip" style="text-transform:uppercase">
             </div>
-            <div class="form-group">
-                <div class="col-sm-2"></div>
-                <div class="col-sm-10">
-                    <button type="button" class="btn btn-default" onclick="btnSimpanpOnClick()" id="btnSimpanp"><span
-                            class="glyphicon glyphicon-ok"></span></button>
-                    <button type="button" class="btn btn-default" onclick="btnKopipOnClick()" id="btnKopip"><span
-                            class="glyphicon glyphicon-duplicate"></button>
-                    <button type="button" class="btn btn-default" onclick="btnKembaliOnClick()" id="btnBatalp"
-                        style="float: right;">Kembali</button>
-                </div>
-            </div>
+            <button type="button" class="btn btn-default" onclick="btnSimpanpOnClick()" id="btnSimpanp"><span
+                    class="glyphicon glyphicon-ok"></span></button>
+            <button type="button" class="btn btn-default" onclick="btnKembaliOnClick()" id="btnBatalp"
+                style="float: right;">Kembali</button>
             <div class="form-group">
                 <div class="col-sm-2"></div>
                 <div class="col-sm-10 table-responsive">
@@ -228,7 +197,39 @@
                 </div>
             </div>
         </form>
-
+        <div id="divkode" style="display: none;">
+            <div class="table-responsive" id="tableKode"></div>
+            <table class='table table-bordered table-striped'>
+                </thead>
+                <tr>
+                    <th>C</th>
+                    <th>D</th>
+                    <th>E</th>
+                    <th>F</th>
+                    <th>G</th>
+                    <th>H</th>
+                    <th>I</th>
+                    <th>J</th>
+                    <th>K</th>
+                    <th>L</th>
+                </tr>
+                </thead>
+                <tbody id='myTable'>
+                    <tr>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>4</td>
+                        <td>5</td>
+                        <td>6</td>
+                        <td>7</td>
+                        <td>8</td>
+                        <td>9</td>
+                        <td>0</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script>
@@ -250,6 +251,8 @@
         let meRadioL3 = document.getElementById("radiol3");
         let meRadioL2 = document.getElementById("radiol2");
         let meRadioL1 = document.getElementById("radiol1");
+        let meChkPindah = document.getElementById("chkPindah");
+        let meDivKode = document.getElementById("divkode");
 
         let meFormSearch = document.getElementById("formSearch");
         let meInputSearch = document.getElementById("inputSearch");
@@ -463,14 +466,6 @@
             meTableRiwayatp.style.display = "none";
         }
 
-        function btnKopipOnClick() {
-            if (meHiddenIdp.value != "") {
-                meHiddenIdp.value = "";
-            } else {
-
-            }
-        }
-
         function btnClearInputSearchOnClick() {
             meInputSearch.value = "";
             meInputSearch.focus();
@@ -478,9 +473,24 @@
             $rows.show();
         }
 
+        function btnCancelTransOnClick() {
+            if (confirm("Batalkan transaksi ?")) {
+                moTransaksi = {};
+                generateTableTransaksi(moTransaksi);
+            }
+        }
+
         function btnNewOnClick() {
-            moTransaksi = {};
-            generateTableTransaksi(moTransaksi);
+            if (confirm("Transaksi selesai ?")) {
+                let refdbproduk = firebase.database().ref('/produk');
+                for (x in moTransaksi) {
+                    refdbproduk.update({
+                        [moTransaksi[x].id + "/transaksi"]: mdToday
+                    });
+                }
+                moTransaksi = {};
+                generateTableTransaksi(moTransaksi);
+            }
         }
 
         function btnTambahOnClick() {
@@ -537,6 +547,8 @@
                     // update harga
                     refdbproduk.update({
                         [meHiddenId.value + "/harga"]: meInputHarga.value
+                        , [meHiddenId.value + "/nama"]: meInputNama.value
+                        , [meHiddenId.value + "/lokasi"]: meInputLokasi.value
                         , [meHiddenId.value + "/update"]: mdToday
                         , [meHiddenId.value + "/user"]: firebase.auth().currentUser.email
                     });
@@ -551,6 +563,23 @@
                 }
             }
             alert("perubahan telah tersimpan");
+        }
+
+        function btnKopiOnClick() {
+            meHiddenIdp.value = "";
+            meInputNamap.value = meInputNama.value
+            meInputStokp.value = "";
+            meInputUpdatestokp.value = "";
+            meInputBelip.value = "";
+            meInputHargap.value = meInputHarga.value;
+            meInputHetp.value = "";
+            meInputUpdatep.value = "";
+            meInputLokasip.value = meInputLokasi.value;
+            meFormEdit.style.display = "none";
+            meFormEditp.style.display = "block";
+            meBtnHapusp.disabled = true;
+            meBtnRiwayatp.disabled = true;
+            meBtnKopip.disabled = true;
         }
 
         function btnKembaliOnClick() {
@@ -586,7 +615,12 @@
         }
 
         function noProdukOnClick() {
-            alert(genRandonString(4));
+            // alert(genRandonString(4));
+            if (meDivKode.style.display === "none") {
+                meDivKode.style.display = "block";
+            } else {
+                meDivKode.style.display = "none";
+            }
         }
 
         function transaksiOnClick() {
@@ -595,8 +629,6 @@
                 meFormEdit.style.display = "none";
                 meFormEditp.style.display = "none";
                 meFormTransaksi.style.display = "block";
-            } else {
-                meFormTransaksi.style.display = "none";
             }
         }
 
@@ -626,7 +658,7 @@
                     mUpdatestok = mProdukDb[i]["updatestok"];
                     mUpdate = mProdukDb[i]["update"];
                     mLokasi = mProdukDb[i]["lokasi"];
-                    if (mUpdate == mdToday) meInputNama.style.backgroundColor = 'lightgreen';
+                    if (mUpdate == mdToday || mProdukDb[i]["transaksi"] == mdToday) meInputNama.style.color = 'blue';
                     else meInputNama.style.backgroundColor = meInputHarga.style.backgroundColor;
                 }
             }
@@ -658,38 +690,93 @@
         }
 
         function radiol5OnClick() {
-            switchTransaksi();
-            moTransaksi = moTransaksi5;
+            if (chkPindah.checked) {
+                alert("pindah dari lubang " + moTransaksiLubang + " ke 5 ?");
+                meChkPindah.checked = false;
+                // -----
+                moTransaksiNow = moTransaksi;
+                moTransaksi = moTransaksi5;
+                switchTransaksi();
+                moTransaksi = moTransaksiNow;
+                // -----
+            } else {
+                switchTransaksi();
+                moTransaksi = moTransaksi5;
+                generateTableTransaksi(moTransaksi);
+            }
             moTransaksiLubang = 5;
-            generateTableTransaksi(moTransaksi);
         }
 
         function radiol4OnClick() {
-            switchTransaksi();
-            moTransaksi = moTransaksi4;
+            if (chkPindah.checked) {
+                alert("pindah dari lubang " + moTransaksiLubang + " ke 4 ?");
+                meChkPindah.checked = false;
+                // -----
+                moTransaksiNow = moTransaksi;
+                moTransaksi = moTransaksi4;
+                switchTransaksi();
+                moTransaksi = moTransaksiNow;
+                // -----
+            } else {
+                switchTransaksi();
+                moTransaksi = moTransaksi4;
+                generateTableTransaksi(moTransaksi);
+            }
             moTransaksiLubang = 4;
-            generateTableTransaksi(moTransaksi);
         }
 
         function radiol3OnClick() {
-            switchTransaksi();
-            moTransaksi = moTransaksi3;
+            if (chkPindah.checked) {
+                alert("pindah dari lubang " + moTransaksiLubang + " ke 3 ?");
+                meChkPindah.checked = false;
+                // -----
+                moTransaksiNow = moTransaksi;
+                moTransaksi = moTransaksi3;
+                switchTransaksi();
+                moTransaksi = moTransaksiNow;
+                // -----
+            } else {
+                switchTransaksi();
+                moTransaksi = moTransaksi3;
+                generateTableTransaksi(moTransaksi);
+            }
             moTransaksiLubang = 3;
-            generateTableTransaksi(moTransaksi);
         }
 
         function radiol2OnClick() {
-            switchTransaksi();
-            moTransaksi = moTransaksi2;
+            if (chkPindah.checked) {
+                alert("pindah dari lubang " + moTransaksiLubang + " ke 2 ?");
+                meChkPindah.checked = false;
+                // -----
+                moTransaksiNow = moTransaksi;
+                moTransaksi = moTransaksi2;
+                switchTransaksi();
+                moTransaksi = moTransaksiNow;
+                // -----
+            } else {
+                switchTransaksi();
+                moTransaksi = moTransaksi2;
+                generateTableTransaksi(moTransaksi);
+            }
             moTransaksiLubang = 2;
-            generateTableTransaksi(moTransaksi);
         }
 
         function radiol1OnClick() {
-            switchTransaksi();
-            moTransaksi = moTransaksi1;
+            if (chkPindah.checked) {
+                alert("pindah dari lubang " + moTransaksiLubang + " ke 1 ?");
+                meChkPindah.checked = false;
+                // -----
+                moTransaksiNow = moTransaksi;
+                moTransaksi = moTransaksi1;
+                switchTransaksi();
+                moTransaksi = moTransaksiNow;
+                // -----
+            } else {
+                switchTransaksi();
+                moTransaksi = moTransaksi1;
+                generateTableTransaksi(moTransaksi);
+            }
             moTransaksiLubang = 1;
-            generateTableTransaksi(moTransaksi);
         }
 
         // ------------------------------------------- function --------------------------------
@@ -747,7 +834,8 @@
             text += "<tbody id='myTable'>";
             for (x in db) {
                 text += "<tr>";
-                text += "<td onclick=tableProdukOnClick('" + db[x].id + "')>" + db[x].nama + "</td>";
+                if (db[x].update == mdToday || db[x].transaksi == mdToday) text += "<td style='color:blue' onclick=tableProdukOnClick('" + db[x].id + "')>" + db[x].nama + "</td>";
+                else text += "<td onclick=tableProdukOnClick('" + db[x].id + "')>" + db[x].nama + "</td>";
                 text += "<td onclick=tableProdukOnClick('" + db[x].id + "')>" + db[x].stok + "</td>";
                 text += "<td onclick=tableProdukOnClick('" + db[x].id + "')>" + db[x].harga + "</td>";
                 text += "<td onclick=tableProdukOnClick('" + db[x].id + "')>" + db[x].update + "</td>";
@@ -766,7 +854,9 @@
             text += "<tbody id='myTable'>";
             for (x in db) {
                 text += "<tr>";
-                text += "<td onclick=tableTransaksiOnClick('" + db[x].id + "')>" + db[x].nama + "</td>";
+                if (db[x].update == mdToday || db[x].transaksi == mdToday) text += "<td style='color:blue' onclick=tableTransaksiOnClick('" + db[x].id + "')>" + db[x].nama + "</td>";
+                else text += "<td onclick=tableTransaksiOnClick('" + db[x].id + "')>" + db[x].update + "</td>";
+                // text += "<td onclick=tableTransaksiOnClick('" + db[x].id + "')>" + db[x].nama + "</td>";
                 text += "<td style='text-align: right' onclick=tableTransaksiOnClick('" + db[x].id + "')>" + db[x].harga + "</td>";
                 text += "<td style='text-align: right' onclick=tableTransaksiOnClick('" + db[x].id + "')>" + db[x].jumlah + "</td>";
                 text += "<td style='text-align: right' onclick=tableTransaksiOnClick('" + db[x].id + "')>" + db[x].total + "</td>";
@@ -865,13 +955,14 @@
                         $changedPost = snapshot.val();
                         for (let i in mProdukDb) {
                             if (mProdukDb[i]["id"] == $changedPost.id) {
-                                mProdukDb[i]["nama"] = $changedPost.nama;
-                                mProdukDb[i]["lokasi"] = $changedPost.lokasi;
-                                mProdukDb[i]["stok"] = $changedPost.stok;
-                                mProdukDb[i]["updatestok"] = $changedPost.updatestok;
                                 mProdukDb[i]["beli"] = $changedPost.beli;
                                 mProdukDb[i]["harga"] = $changedPost.harga;
+                                mProdukDb[i]["lokasi"] = $changedPost.lokasi;
+                                mProdukDb[i]["nama"] = $changedPost.nama;
+                                mProdukDb[i]["stok"] = $changedPost.stok;
+                                mProdukDb[i]["transaksi"] = $changedPost.transaksi;
                                 mProdukDb[i]["update"] = $changedPost.update;
+                                mProdukDb[i]["updatestok"] = $changedPost.updatestok;
                             }
                         }
                         generateTableProduk(mProdukDb);
@@ -881,14 +972,15 @@
                     firebase.database().ref('/produk').on('child_added', (snapshot) => {
                         mProdukDb = Object.assign(mProdukDb, {
                             [snapshot.val().id]: {
-                                "id": snapshot.val().id,
-                                "nama": snapshot.val().nama,
-                                "lokasi": snapshot.val().lokasi,
-                                "stok": snapshot.val().stok,
-                                "updatestok": snapshot.val().updatestok,
                                 "beli": snapshot.val().beli,
                                 "harga": snapshot.val().harga,
-                                "update": snapshot.val().update
+                                "id": snapshot.val().id,
+                                "lokasi": snapshot.val().lokasi,
+                                "nama": snapshot.val().nama,
+                                "stok": snapshot.val().stok,
+                                "transaksi": snapshot.val().transaksi,
+                                "update": snapshot.val().update,
+                                "updatestok": snapshot.val().updatestok
                             }
                         });
                         generateTableProduk(mProdukDb);

@@ -609,6 +609,7 @@
                 meFormSearch.style.display = "block";
                 meFormEdit.style.display = "none";
                 meFormTransaksi.style.display = "none";
+                meInputSearch.focus();
             } else {
                 meFormSearch.style.display = "none";
             }
@@ -855,7 +856,7 @@
             for (x in db) {
                 text += "<tr>";
                 if (db[x].update == mdToday || db[x].transaksi == mdToday) text += "<td style='color:blue' onclick=tableTransaksiOnClick('" + db[x].id + "')>" + db[x].nama + "</td>";
-                else text += "<td onclick=tableTransaksiOnClick('" + db[x].id + "')>" + db[x].update + "</td>";
+                else text += "<td onclick=tableTransaksiOnClick('" + db[x].id + "')>" + db[x].nama + "</td>";
                 // text += "<td onclick=tableTransaksiOnClick('" + db[x].id + "')>" + db[x].nama + "</td>";
                 text += "<td style='text-align: right' onclick=tableTransaksiOnClick('" + db[x].id + "')>" + db[x].harga + "</td>";
                 text += "<td style='text-align: right' onclick=tableTransaksiOnClick('" + db[x].id + "')>" + db[x].jumlah + "</td>";

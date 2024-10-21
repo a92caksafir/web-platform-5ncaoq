@@ -146,4 +146,8 @@ function btnClearInputSearchOnClick() {
     meInputSearch.focus();
     var $rows = $('#tableProduk tr');
     $rows.show();
-}     
+}
+
+function initProduk() {
+    meFormSearch.style.display = "block";
+}

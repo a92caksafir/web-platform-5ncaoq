@@ -337,3 +337,8 @@ function btnKopiOnClick() {
     meBtnRiwayatp.disabled = true;
     meBtnKopip.disabled = true;
 } 
+
+function initTransaksi() {
+    meFormLubang.style.display = "block";
+    meFormTransaksi.style.display = "block";
+}

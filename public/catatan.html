@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Transaksiku</title>
+    <title>Catatan</title>
 
     <!-- update the version number as needed -->
     <script defer src="/__/firebase/9.6.10/firebase-app-compat.js"></script>
@@ -22,17 +22,32 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
+    <script src="myfirebase.js"></script>
+    <script src="util.js"></script>
+    <script src="produk.js"></script>
+    <script src="transaksi.js"></script>
 </head>
 
 <body>
     <div id="divLogin">
         <button disabled type="button" class="btn btn-default" id="btnLogin" style="float: right;">Login</button>
     </div>
+
     <div class="container" id="containerMain" style="display: none;">
-        <h5 id="meH4Transaksyt" onclick=transaksiOnClick()>Transaksi</h5>
+        <button type="button" class="btn btn-default" id="btnHome" onclick=btnHomeOnClick()><span
+            class="glyphicon glyphicon-home"></span></button>
+        <h5 id="meH4Transaksyt">-</h5>
+
+        <!-- ------------------------- form menu -------------------------------- -->
+        <form id="formMenu">
+            <button type="button" class="btn btn-default btn-block" onclick="btnMenuProdukOnClick()"
+                id="btnMenuProduk">Produk</button>
+            <button type="button" class="btn btn-default btn-block" onclick="btnMenuTransaksiOnClick()"
+                id="btnMenuTransaksi">Transaksi</button>
+        </form>
 
         <!-- ------------------------- form lubang -------------------------------- -->
-        <form id="formLubang" class="form-inline">
+        <form id="formLubang" class="form-inline" style="display: none;">
             <div class="form-check">
                 <input type="radio" class="form-check-input" onclick="radiol5OnClick()" id="radiol5" name="lubang"
                     value="l5" checked>
@@ -55,7 +70,7 @@
         </form>
 
         <!-- ------------------------- form transaksi -------------------------------- -->
-        <form id="formTransaksi" class="form-inline">
+        <form id="formTransaksi" class="form-inline" style="display: none;">
             <div class="table-responsive" id="tableTransaksi"></div>
             <button type="button" class="btn btn-default" onclick="produkOnClick()" id="btnProduk"><span
                     class="glyphicon glyphicon-plus"></span></button>
@@ -84,7 +99,7 @@
                     class="glyphicon glyphicon-plus"></span></button>
         </form>
 
-        <!-- ------------------------- form edit -------------------------------- -->
+        <!-- ------------------------- form edit transaksi-------------------------------- -->
         <form id="formEdit" class="form-horizontal" style="display: none;">
             <div class="form-group">
                 <input type="hidden" class="form-control" id="id">
@@ -196,6 +211,12 @@
             </div>
             <button type="button" class="btn btn-default" onclick="btnSimpanpOnClick()" id="btnSimpanp"><span
                     class="glyphicon glyphicon-ok"></span></button>
+            <button type="button" class="btn btn-default" onclick="btnHapuspOnClick()" id="btnHapusp"><span
+                    class="glyphicon glyphicon-trash"></span></button>
+            <button type="button" class="btn btn-default" onclick="btnRiwayatpOnClick()" id="btnRiwayatp"><span
+                    class="glyphicon glyphicon-time"></span></button>
+            <button type="button" class="btn btn-default" onclick="btnKopipOnClick()" id="btnKopip"><span
+                    class="glyphicon glyphicon-duplicate"></button>
             <button type="button" class="btn btn-default" onclick="btnKembaliOnClick()" id="btnBatalp"
                 style="float: right;">Kembali</button>
             <div class="form-group">
@@ -265,6 +286,9 @@
         let meChkPindah = document.getElementById("chkPindah");
         let meDivKode = document.getElementById("divkode");
 
+        let meFormMenu = document.getElementById("formMenu");
+        let meFormLubang = document.getElementById("formLubang");
+
         let meFormSearch = document.getElementById("formSearch");
         let meInputSearch = document.getElementById("inputSearch");
         let meTableProduk = document.getElementById("tableProduk");
@@ -292,6 +316,8 @@
         let meInputUpdatep = document.getElementById("inputUpdatep");
         let meInputLokasip = document.getElementById("inputLokasip");
         let meBtnSimpanp = document.getElementById("btnSimpanp");
+        let meBtnRiwayatp = document.getElementById("btnRiwayatp");
+        let meBtnHapusp = document.getElementById("btnHapusp");
         let meBtnKopip = document.getElementById("btnKopip");
         let meBtnBatalp = document.getElementById("btnBatalp");
 
@@ -315,7 +341,7 @@
         let mdmm = String(mdToday.getMonth() + 1).padStart(2, '0'); //January is 0!
         let mdyyyy = mdToday.getFullYear();
         mdToday = mddd + '-' + mdmm + '-' + mdyyyy;
-        meH4Transaksyt.innerHTML = "Transaksi Tgl " + mdToday
+        meH4Transaksyt.innerHTML = "Tgl " + mdToday
 
         // ------------------------------------------- logic --------------------------------
 
@@ -323,7 +349,7 @@
 
         // ------------------------------------------- even --------------------------------
 
-        meInputJumlah.bind('keyup mouseup', function () {
+        $('#inputJumlah').bind('keyup mouseup', function () {
             hitungHarga();
         });
 
@@ -377,7 +403,34 @@
             meInputLokasip.value = removeTrailingSlash(this.value);
         });
 
+        // ------------------------------------------- click function --------------------------------
+
+        function btnHomeOnClick() {
+            initHide();
+            meFormMenu.style.display = "block";
+        }
+
+        function btnMenuProdukOnClick() {
+            initHide();
+            initProduk();
+        }
+
+        function btnMenuTransaksiOnClick() {
+            initHide();
+            initTransaksi();
+        }
+
         // ------------------------------------------- function --------------------------------      
+
+        function initHide() {
+            meFormMenu.style.display = "none";
+            meFormLubang.style.display = "none";
+            meFormSearch.style.display = "none";
+            meFormTransaksi.style.display = "none";
+            meFormEdit.style.display = "none";
+            meFormEditp.style.display = "none";
+            meDivKode.style.display = "none";
+        }
 
         $(document).ready(function () {
             $("#inputSearch").on("keyup", function () {

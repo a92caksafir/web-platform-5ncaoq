@@ -32,6 +32,8 @@
       Google</button>
   </div>
   <div class="container" id="maincontainer" style="display: none;">
+
+    <!-- ------------------------- form search -------------------------------- -->
     <form id="formSearch" class="form-inline">
       <br />
       <div class="form-group">
@@ -45,6 +47,8 @@
           class="glyphicon glyphicon-plus"></span></button>
       <button type="button" class="btn btn-default" onclick="btnBackupOnClick()" id="btnBackup">Backup</button>
     </form>
+
+    <!-- ------------------------- form edit -------------------------------- -->
     <form class="form-horizontal" id="formEdit" style="display: none;">
       <div class="form-group">
         <input type="hidden" class="form-control" id="id">
@@ -122,6 +126,8 @@
     </form>
 
   </div>
+
+  <!-- ------------------------- container debug -------------------------------- -->
   <div class="container" id="debugcontainer" style="display: none; color:white;">
     <h2>Debug</h2>
     <form class="form-inline">
@@ -559,7 +565,7 @@
           document.getElementById('btnSignin').textContent = 'Sign in with Google';
           document.getElementById('quickstart-account-details').textContent = 'null';
           document.getElementById('quickstart-oauthtoken').textContent = 'null';
-          document.getElementById('maincontainer').style.display = "none"
+          document.getElementById('maincontainer').style.display = "none";
         }
         document.getElementById('btnSignin').disabled = false;
       });

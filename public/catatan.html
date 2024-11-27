@@ -35,7 +35,7 @@
 
     <div class="container" id="containerMain" style="display: none;">
         <button type="button" class="btn btn-default" id="btnHome" onclick=btnHomeOnClick()><span
-            class="glyphicon glyphicon-home"></span></button>
+                class="glyphicon glyphicon-home"></span></button>
         <h5 id="meH4Transaksyt">-</h5>
 
         <!-- ------------------------- form menu -------------------------------- -->
@@ -99,7 +99,7 @@
                     class="glyphicon glyphicon-plus"></span></button>
         </form>
 
-        <!-- ------------------------- form edit transaksi-------------------------------- -->
+        <!-- ------------------------- form edit-------------------------------- -->
         <form id="formEdit" class="form-horizontal" style="display: none;">
             <div class="form-group">
                 <input type="hidden" class="form-control" id="id">
@@ -121,6 +121,36 @@
                     <button type="button" class="btn btn-default">Harga</button>
                 </div>
                 <input class="form-control" id="inputHarga" style="text-transform:uppercase">
+            </div>
+            <div class="input-group" id="igStok">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default">Stok</button>
+                </div>
+                <input class="form-control" id="inputStok">
+            </div>
+            <div class="input-group" id="igUpdateStok">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default">Update Stok</button>
+                </div>
+                <input class="form-control" id="inputUpdatestok" readonly>
+            </div>
+            <div class="input-group" id="igBeli">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default">Beli</button>
+                </div>
+                <input class="form-control" id="inputBeli">
+            </div>
+            <div class="input-group" id="igHet">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default">Het</button>
+                </div>
+                <input class="form-control" id="inputHet">
+            </div>
+            <div class="input-group" id="igUpdateHarga">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default">Update Harga</button>
+                </div>
+                <input class="form-control" id="inputUpdate" readonly>
             </div>
             <div class="input-group">
                 <div class="input-group-btn">
@@ -150,74 +180,13 @@
                     class="glyphicon glyphicon-remove"></button>
             <button type="button" class="btn btn-default" onclick="btnSimpanOnClick()" id="btnSimpan"><span
                     class="glyphicon glyphicon-floppy-disk"></button>
+            <button type="button" class="btn btn-default" onclick="btnHapuspOnClick()" id="btnHapus"><span
+                    class="glyphicon glyphicon-trash"></span></button>
+            <button type="button" class="btn btn-default" onclick="btnRiwayatpOnClick()" id="btnRiwayat"><span
+                    class="glyphicon glyphicon-time"></span></button>
             <button type="button" class="btn btn-default" onclick="btnKopiOnClick()" id="btnKopi"><span
                     class="glyphicon glyphicon-duplicate"></button>
             <button type="button" class="btn btn-default" onclick="btnKembaliOnClick()" id="btnKembali"
-                style="float: right;">Kembali</button>
-        </form>
-
-        <!-- ------------------------- form edit product -------------------------------- -->
-        <form id="formEditp" class="form-horizontal" style="display: none;">
-            <div class="form-group">
-                <input type="hidden" class="form-control" id="hiddenIdp">
-            </div>
-            <div class="input-group">
-                <div class="input-group-btn">
-                    <button type="button" class="btn btn-default">Nama</button>
-                </div>
-                <input class="form-control" id="inputNamap" style="text-transform:uppercase">
-            </div>
-            <div class="input-group">
-                <div class="input-group-btn">
-                    <button type="button" class="btn btn-default">Stok</button>
-                </div>
-                <input class="form-control" id="inputStokp">
-            </div>
-            <div class="input-group">
-                <div class="input-group-btn">
-                    <button type="button" class="btn btn-default">Update Stok</button>
-                </div>
-                <input class="form-control" id="inputUpdatestokp" readonly>
-            </div>
-            <div class="input-group">
-                <div class="input-group-btn">
-                    <button type="button" class="btn btn-default">Beli</button>
-                </div>
-                <input class="form-control" id="inputBelip">
-            </div>
-            <div class="input-group">
-                <div class="input-group-btn">
-                    <button type="button" class="btn btn-default">Jual</button>
-                </div>
-                <input class="form-control" id="inputHargap">
-            </div>
-            <div class="input-group">
-                <div class="input-group-btn">
-                    <button type="button" class="btn btn-default">Het</button>
-                </div>
-                <input class="form-control" id="inputHetp">
-            </div>
-            <div class="input-group">
-                <div class="input-group-btn">
-                    <button type="button" class="btn btn-default">Update Harga</button>
-                </div>
-                <input class="form-control" id="inputUpdatep" readonly>
-            </div>
-            <div class="input-group">
-                <div class="input-group-btn">
-                    <button type="button" class="btn btn-default">Lokasi</button>
-                </div>
-                <input class="form-control" id="inputLokasip" style="text-transform:uppercase">
-            </div>
-            <button type="button" class="btn btn-default" onclick="btnSimpanpOnClick()" id="btnSimpanp"><span
-                    class="glyphicon glyphicon-ok"></span></button>
-            <button type="button" class="btn btn-default" onclick="btnHapuspOnClick()" id="btnHapusp"><span
-                    class="glyphicon glyphicon-trash"></span></button>
-            <button type="button" class="btn btn-default" onclick="btnRiwayatpOnClick()" id="btnRiwayatp"><span
-                    class="glyphicon glyphicon-time"></span></button>
-            <button type="button" class="btn btn-default" onclick="btnKopipOnClick()" id="btnKopip"><span
-                    class="glyphicon glyphicon-duplicate"></button>
-            <button type="button" class="btn btn-default" onclick="btnKembaliOnClick()" id="btnBatalp"
                 style="float: right;">Kembali</button>
             <div class="form-group">
                 <div class="col-sm-2"></div>
@@ -226,7 +195,7 @@
                     </table>
                 </div>
             </div>
-        </form>
+        </form>       
 
         <!-- ------------------------- div kode -------------------------------- -->
         <div id="divkode" style="display: none;">
@@ -298,28 +267,21 @@
         let meInputNama = document.getElementById("inputNama");
         let meInputLokasi = document.getElementById("inputLokasi");
         let meInputHarga = document.getElementById("inputHarga");
+        let meInputStok= document.getElementById("inputStok");
+        let meInputUpdatestok = document.getElementById("inputUpdatestok");
+        let meInputBeli = document.getElementById("inputBeli");
+        let meInputHet = document.getElementById("inputHet");
+        let meInputUpdate = document.getElementById("inputUpdate");
         let meInputJumlah = document.getElementById("inputJumlah");
         let meInputTotal = document.getElementById("inputTotal");
         let meBtnTambah = document.getElementById("btnTambah");
         let meBtnUbah = document.getElementById("btnUbah");
         let meBtnBatal = document.getElementById("btnBatal");
+        let meBtnSimpan = document.getElementById("btnSimpan");
+        let meBtnRiwayat = document.getElementById("btnRiwayat");
+        let meBtnHapus = document.getElementById("btnHapus");
+        let meBtnKopi = document.getElementById("btnKopi");
         let meBtnKembali = document.getElementById("btnKembali");
-
-        let meFormEditp = document.getElementById("formEditp");
-        let meHiddenIdp = document.getElementById("hiddenIdp");
-        let meInputNamap = document.getElementById("inputNamap");
-        let meInputStokp = document.getElementById("inputStokp");
-        let meInputUpdatestokp = document.getElementById("inputUpdatestokp");
-        let meInputBelip = document.getElementById("inputBelip");
-        let meInputHargap = document.getElementById("inputHargap");
-        let meInputHetp = document.getElementById("inputHetp");
-        let meInputUpdatep = document.getElementById("inputUpdatep");
-        let meInputLokasip = document.getElementById("inputLokasip");
-        let meBtnSimpanp = document.getElementById("btnSimpanp");
-        let meBtnRiwayatp = document.getElementById("btnRiwayatp");
-        let meBtnHapusp = document.getElementById("btnHapusp");
-        let meBtnKopip = document.getElementById("btnKopip");
-        let meBtnBatalp = document.getElementById("btnBatalp");
 
         let meFormTransaksi = document.getElementById("formTransaksi");
         let meTableTransaksi = document.getElementById("tableTransaksi");
@@ -341,7 +303,11 @@
         let mdmm = String(mdToday.getMonth() + 1).padStart(2, '0'); //January is 0!
         let mdyyyy = mdToday.getFullYear();
         mdToday = mddd + '-' + mdmm + '-' + mdyyyy;
-        meH4Transaksyt.innerHTML = "Tgl " + mdToday
+        meH4Transaksyt.innerHTML = "Tgl " + mdToday;
+
+        let mIsMenu = true;
+        let mIsMenuProduk = false;
+        let mIsMenuTransaksi = false;
 
         // ------------------------------------------- logic --------------------------------
 
@@ -354,6 +320,7 @@
         });
 
         $("#inputHarga").bind('keyup mouseup', function () {
+            // meInputHarga.value = formatRupiah(this.value);
             let lHarga = this.value.split('.').join('');
             let lTotal = lHarga * meInputJumlah.value
             meInputTotal.value = formatRupiah(lTotal.toString());
@@ -367,20 +334,20 @@
             meInputTotal.value = formatRupiah(this.value);
         });
 
-        meInputStokp.addEventListener('keyup', function (e) {
-            meInputStokp.value = formatRupiah(this.value);
+        meInputStok.addEventListener('keyup', function (e) {
+            meInputStok.value = formatRupiah(this.value);
         });
 
-        meInputBelip.addEventListener('keyup', function (e) {
-            meInputBelip.value = formatRupiah(this.value);
+        meInputBeli.addEventListener('keyup', function (e) {
+            meInputBeli.value = formatRupiah(this.value);
         });
 
-        meInputHargap.addEventListener('keyup', function (e) {
-            meInputHargap.value = formatRupiah(this.value);
+        meInputHarga.addEventListener('keyup', function (e) {
+            meInputHarga.value = formatRupiah(this.value);
         });
 
-        meInputHetp.addEventListener('keyup', function (e) {
-            meInputHetp.value = formatRupiah(this.value);
+        meInputHet.addEventListener('keyup', function (e) {
+            meInputHet.value = formatRupiah(this.value);
         });
 
         meInputSearch.addEventListener('keyup', function (e) {
@@ -395,40 +362,41 @@
             meInputLokasi.value = removeTrailingSlash(this.value);
         });
 
-        meInputNamap.addEventListener('keyup', function (e) {
-            meInputNamap.value = removeTrailingSlash(this.value);
-        });
-
-        meInputLokasip.addEventListener('keyup', function (e) {
-            meInputLokasip.value = removeTrailingSlash(this.value);
-        });
-
         // ------------------------------------------- click function --------------------------------
 
         function btnHomeOnClick() {
             initHide();
+            mIsMenu = true;
             meFormMenu.style.display = "block";
         }
 
         function btnMenuProdukOnClick() {
             initHide();
+            mIsMenuProduk = true;
             initProduk();
         }
 
         function btnMenuTransaksiOnClick() {
             initHide();
+            mIsMenuTransaksi = true;
             initTransaksi();
         }
 
+        function tableProdukOnClick(lid) {
+            if(mIsMenuProduk) tableProdukPOnClick(lid);
+            else tableProdukTOnClick(lid)
+        }
         // ------------------------------------------- function --------------------------------      
 
         function initHide() {
+            mIsMenu = false;
+            mIsMenuProduk = false;
+            mIsMenuTransaksi = false;
             meFormMenu.style.display = "none";
             meFormLubang.style.display = "none";
             meFormSearch.style.display = "none";
             meFormTransaksi.style.display = "none";
             meFormEdit.style.display = "none";
-            meFormEditp.style.display = "none";
             meDivKode.style.display = "none";
         }
 

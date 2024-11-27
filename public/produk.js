@@ -16,19 +16,23 @@ function generateTableProduk(db) {
     meTableProduk.innerHTML = text;
 }
 
-function tableProdukOnClick(lid) {
-    meFormEdit.style.display = "block";
+function tableProdukPOnClick(lid) {
     meFormSearch.style.display = "none";
     meFormTransaksi.style.display = "none";
+
+    meFormEdit.style.display = "block";
+
     meBtnTambah.disabled = false;
     meBtnUbah.disabled = true;
     meBtnBatal.disabled = true;
+
     meHiddenId.value = "";
     meInputNama.value = "";
     meInputLokasi.value = "";
     meInputHarga.value = "";
     meInputJumlah.value = "0";
     meInputTotal.value = "";
+
     for (var i in mProdukDb) {
         if (mProdukDb[i]["id"] == lid) {
             meHiddenId.value = mProdukDb[i]["id"];

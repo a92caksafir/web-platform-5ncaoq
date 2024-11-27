@@ -316,6 +316,7 @@
         });
 
         $("#inputHarga").bind('keyup mouseup', function () {
+            meInputHarga.value = formatRupiah(this.value);
             let lHarga = this.value.split('.').join('');
             let lTotal = lHarga * meInputJumlah.value
             meInputTotal.value = formatRupiah(lTotal.toString());

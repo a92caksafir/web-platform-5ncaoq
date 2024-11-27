@@ -7,7 +7,7 @@ function generateTableTransaksi(db) {
     for (x in db) {
         text += "<tr>";
         if (db[x].update == mdToday || db[x].transaksi == mdToday) text += "<td style='color:blue' onclick=tableTransaksiOnClick('" + db[x].id + "')>" + db[x].nama + "</td>";
-        else text += "<td onclick=tableTransaksiOnClick('" + db[x].id + "')>" + db[x].update + "</td>";
+        else text += "<td onclick=tableTransaksiOnClick('" + db[x].id + "')>" + db[x].nama + "</td>";
         text += "<td style='text-align: right' onclick=tableTransaksiOnClick('" + db[x].id + "')>" + db[x].harga + "</td>";
         text += "<td style='text-align: right' onclick=tableTransaksiOnClick('" + db[x].id + "')>" + db[x].jumlah + "</td>";
         text += "<td style='text-align: right' onclick=tableTransaksiOnClick('" + db[x].id + "')>" + db[x].total + "</td>";
@@ -74,6 +74,47 @@ function tableTransaksiOnClick(lid) {
             meInputHarga.value = moTransaksi[i]["harga"];
             meInputJumlah.value = moTransaksi[i]["jumlah"];
             meInputTotal.value = moTransaksi[i]["total"];
+        }
+    }
+}
+
+function tableProdukTOnClick(lid) {
+    meFormEdit.style.display = "block";
+    meFormSearch.style.display = "none";
+    meFormTransaksi.style.display = "none";
+
+    document.getElementById("igStok").style.display = "none";
+    document.getElementById("igUpdateStok").style.display = "none";
+    document.getElementById("igBeli").style.display = "none";
+    document.getElementById("igHet").style.display = "none";
+    document.getElementById("igUpdateHarga").style.display = "none";
+    document.getElementById("btnHapus").style.display = "none";
+    document.getElementById("btnRiwayat").style.display = "none";
+
+    meBtnTambah.disabled = false;
+    meBtnUbah.disabled = true;
+    meBtnBatal.disabled = true;
+    meHiddenId.value = "";
+    meInputNama.value = "";
+    meInputLokasi.value = "";
+    meInputHarga.value = "";
+    meInputJumlah.value = "0";
+    meInputTotal.value = "";
+    for (var i in mProdukDb) {
+        if (mProdukDb[i]["id"] == lid) {
+            meHiddenId.value = mProdukDb[i]["id"];
+            meInputNama.value = mProdukDb[i]["nama"];
+            meInputLokasi.value = mProdukDb[i]["lokasi"];
+            meInputHarga.value = mProdukDb[i]["harga"];
+            mBeli = mProdukDb[i]["beli"];
+            mHarga = mProdukDb[i]["harga"];
+            mHet = mProdukDb[i]["het"];
+            mStok = mProdukDb[i]["stok"];
+            mUpdatestok = mProdukDb[i]["updatestok"];
+            mUpdate = mProdukDb[i]["update"];
+            mLokasi = mProdukDb[i]["lokasi"];
+            if (mUpdate == mdToday || mProdukDb[i]["transaksi"] == mdToday) meInputNama.style.color = 'blue';
+            else meInputNama.style.backgroundColor = meInputHarga.style.backgroundColor;
         }
     }
 }

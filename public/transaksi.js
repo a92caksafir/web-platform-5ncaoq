@@ -82,15 +82,6 @@ function tableProdukTOnClick(lid) {
     meFormEdit.style.display = "block";
     meFormSearch.style.display = "none";
     meFormTransaksi.style.display = "none";
-
-    document.getElementById("igStok").style.display = "none";
-    document.getElementById("igUpdateStok").style.display = "none";
-    document.getElementById("igBeli").style.display = "none";
-    document.getElementById("igHet").style.display = "none";
-    document.getElementById("igUpdateHarga").style.display = "none";
-    document.getElementById("btnHapus").style.display = "none";
-    document.getElementById("btnRiwayat").style.display = "none";
-
     meBtnTambah.disabled = false;
     meBtnUbah.disabled = true;
     meBtnBatal.disabled = true;
@@ -224,26 +215,46 @@ function radiol1OnClick() {
     moTransaksiLubang = 1;
 }
 
-function btnKembaliOnClick() {
-    meHiddenId.value = "";
-    meInputNama.value = "";
-    meInputLokasi.value = "";
-    meInputHarga.value = "";
-    meInputJumlah.value = "";
-    meInputTotal.value = "";
-    meFormEdit.style.display = "none";
-    meFormEditp.style.display = "none";
-    if (meFormSearch.style.display === "none") {
-        meFormSearch.style.display = "block";
-    } else {
-        meFormTransaksi.style.display = "block";
-    }
-}
-
 function kembalianOnClick() {
     let lGrandTotal = meInputGrandTotal.value.split('.').join('');
     let lBayar = meInputBayar.value.split('.').join('');
     meInputKembalian.value = formatRupiah((lBayar - lGrandTotal).toString());
+}
+
+function btnIncrementClick() {
+    let liNum = parseInt(meInputJumlah.value);
+    liNum = isNaN(liNum) ? 0 : liNum;
+    liNum++;
+    meInputJumlah.value = liNum;
+    hitungHarga();
+}
+
+function btnDecrementClick() {
+    let liNum = parseInt(meInputJumlah.value);
+    liNum = isNaN(liNum) ? 0 : liNum;
+    liNum--;
+    meInputJumlah.value = liNum;
+    hitungHarga();
+}
+
+function produkOnClick() {
+    if (meFormSearch.style.display === "none") {
+        meFormSearch.style.display = "block";
+        meFormEdit.style.display = "none";
+        meFormTransaksi.style.display = "none";
+        meInputSearch.focus();
+    } else {
+        meFormSearch.style.display = "none";
+    }
+}
+
+function noProdukOnClick() {
+    // alert(genRandonString(4));
+    if (meDivKode.style.display === "none") {
+        meDivKode.style.display = "block";
+    } else {
+        meDivKode.style.display = "none";
+    }
 }
 
 function btnCancelTransOnClick() {
@@ -295,7 +306,7 @@ function btnBatalOnClick() {
     meFormTransaksi.style.display = "block";
 }
 
-function btnSimpanOnClick() {
+function btnSimpantOnClick() {
     let refdbproduk = firebase.database().ref('/produk');
     if (meHiddenId.value.length > 0) {
         if (meInputHarga.value.length > 0) {
@@ -337,47 +348,6 @@ function btnSimpanOnClick() {
     }
     alert("perubahan telah tersimpan");
 }
-
-function btnIncrementClick() {
-    let liNum = parseInt(meInputJumlah.value);
-    liNum = isNaN(liNum) ? 0 : liNum;
-    liNum++;
-    meInputJumlah.value = liNum;
-    hitungHarga();
-}
-
-function btnDecrementClick() {
-    let liNum = parseInt(meInputJumlah.value);
-    liNum = isNaN(liNum) ? 0 : liNum;
-    liNum--;
-    meInputJumlah.value = liNum;
-    hitungHarga();
-}
-
-function noProdukOnClick() {
-    if (meDivKode.style.display === "none") {
-        meDivKode.style.display = "block";
-    } else {
-        meDivKode.style.display = "none";
-    }
-}
-
-function btnKopiOnClick() {
-    meHiddenIdp.value = "";
-    meInputNamap.value = meInputNama.value
-    meInputStokp.value = "";
-    meInputUpdatestokp.value = "";
-    meInputBelip.value = "";
-    meInputHargap.value = meInputHarga.value;
-    meInputHetp.value = "";
-    meInputUpdatep.value = "";
-    meInputLokasip.value = meInputLokasi.value;
-    meFormEdit.style.display = "none";
-    meFormEditp.style.display = "block";
-    meBtnHapusp.disabled = true;
-    meBtnRiwayatp.disabled = true;
-    meBtnKopip.disabled = true;
-} 
 
 function initTransaksi() {
     meFormLubang.style.display = "block";

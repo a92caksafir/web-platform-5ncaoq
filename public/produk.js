@@ -128,6 +128,57 @@ function btnSimpanpOnClick() {
     meTableRiwayatp.style.display = "none";
 }
 
+function btnHapusOnClick() {
+    if (confirm("Hapus " + document.getElementById("nama").value + " ?")) {
+        let id = document.getElementById("id").value;
+        let refdbproduk = firebase.database().ref('/produk');
+        refdbproduk.child(id).remove();
+
+        if (confirm("Hapus riwayat harga ?")) {
+            let lRefDbUpdate = firebase.database().ref('/update/');
+            lRefDbUpdate.child(id).remove();
+        }
+
+        document.getElementById("formSearch").style.display = "block";
+        document.getElementById("formEdit").style.display = "none";
+    }
+}
+
+function btnRiwayatOnClick() {
+    firebase.database().ref('/update/' + txtId.value).once('value', (snapshot) => {
+        $riwayat = snapshot.val();
+        $riwayatarr = Object.entries($riwayat);
+        $riwayatarrReversed = $riwayatarr.reverse();
+        let text = "";
+        text += "<tr><th>Expired</th><th>Beli</th><th>Jual</th><th>Het</th><th>Del</th></tr></thead>";
+        text += "<tbody id='mytableRiwayat'>";
+        $riwayatarrReversed.forEach(function (arrayItem) {
+            text += "<tr>";
+            text += "<td>" + arrayItem[1].update + "</td>";
+            text += "<td>" + arrayItem[1].beli + "</td>";
+            text += "<td>" + arrayItem[1].harga + "</td>";
+            text += "<td>" + arrayItem[1].het + "</td>";
+            text += "<td><button type='button' class='btn btn-default' onclick='btnHapusRiwayatOnClick(this," + arrayItem[1].updateday + ")' value='Delete'><span class='glyphicon glyphicon-trash'></span></button></td>";
+            text += "</tr>";
+        });
+        text += "</tbody>";
+        document.getElementById("tableRiwayat").style.display = "block";
+        document.getElementById("tableRiwayat").innerHTML = text;
+    });
+}
+
+function btnHapusRiwayatOnClick(lBtn, lUpdateDay) {
+    let lRowIndex = lBtn.parentNode.parentNode.rowIndex;
+    let lTableRiwayat = document.getElementById("tableRiwayat");
+    let lUpdate = lTableRiwayat.rows[lRowIndex].cells[0].innerHTML;
+    // confirm(r);
+    if (confirm("Hapus riwayat tgl " + lUpdate + " ?")) {
+        let lRefDbUpdate = firebase.database().ref('/update/' + txtId.value);
+        lRefDbUpdate.child(lUpdateDay).remove();
+        btnRiwayatOnClick();
+    }
+}
+
 function btnTambahpOnClick() {
     meHiddenIdp.value = "";
     meInputNamap.value = meInputSearch.value;
@@ -143,13 +194,6 @@ function btnTambahpOnClick() {
     meBtnHapusp.disabled = true;
     meBtnRiwayatp.disabled = true;
     meBtnKopip.disabled = true;
-}
-
-function btnClearInputSearchOnClick() {
-    meInputSearch.value = "";
-    meInputSearch.focus();
-    var $rows = $('#tableProduk tr');
-    $rows.show();
 }
 
 function initProduk() {

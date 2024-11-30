@@ -97,6 +97,7 @@
             <div class="table-responsive" id="tableProduk"></div>
             <button type="button" class="btn btn-default" onclick="btnTambahpOnClick()" id="btnTambahp"><span
                     class="glyphicon glyphicon-plus"></span></button>
+            <button type="button" class="btn btn-default" onclick="btnBackupOnClick()" id="btnBackup">Backup</button>
         </form>
 
         <!-- ------------------------- form edit-------------------------------- -->
@@ -195,7 +196,7 @@
                     </table>
                 </div>
             </div>
-        </form>       
+        </form>
 
         <!-- ------------------------- div kode -------------------------------- -->
         <div id="divkode" style="display: none;">
@@ -267,7 +268,7 @@
         let meInputNama = document.getElementById("inputNama");
         let meInputLokasi = document.getElementById("inputLokasi");
         let meInputHarga = document.getElementById("inputHarga");
-        let meInputStok= document.getElementById("inputStok");
+        let meInputStok = document.getElementById("inputStok");
         let meInputUpdatestok = document.getElementById("inputUpdatestok");
         let meInputBeli = document.getElementById("inputBeli");
         let meInputHet = document.getElementById("inputHet");
@@ -305,7 +306,6 @@
         mdToday = mddd + '-' + mdmm + '-' + mdyyyy;
         meH4Transaksyt.innerHTML = "Tgl " + mdToday;
 
-        let mIsMenu = true;
         let mIsMenuProduk = false;
         let mIsMenuTransaksi = false;
 
@@ -365,33 +365,111 @@
         // ------------------------------------------- click function --------------------------------
 
         function btnHomeOnClick() {
-            initHide();
-            mIsMenu = true;
+            initMain();
             meFormMenu.style.display = "block";
         }
 
         function btnMenuProdukOnClick() {
-            initHide();
             mIsMenuProduk = true;
+            toogleFormSearch("none")
+            toogleFormEdit("block");
+            toogleFormEdit2("none");
             initProduk();
         }
 
         function btnMenuTransaksiOnClick() {
-            initHide();
             mIsMenuTransaksi = true;
+            toogleFormSearch("block")
+            toogleFormEdit("none");
+            toogleFormEdit2("block");
             initTransaksi();
         }
 
         function tableProdukOnClick(lid) {
-            if(mIsMenuProduk) tableProdukPOnClick(lid);
-            else tableProdukTOnClick(lid)
+            if (mIsMenuProduk) {
+                tableProdukPOnClick(lid);
+            }
+            else {
+                tableProdukTOnClick(lid)
+            }
         }
+
+        function toogleFormSearch(lDisplay) {
+            document.getElementById("btnTransaksi").style.display = lDisplay;
+
+        }
+
+        function toogleFormEdit(lDisplay) {
+            document.getElementById("igStok").style.display = lDisplay;
+            document.getElementById("igUpdateStok").style.display = lDisplay;
+            document.getElementById("igBeli").style.display = lDisplay;
+            document.getElementById("igHet").style.display = lDisplay;
+            document.getElementById("igUpdateHarga").style.display = lDisplay;
+
+            document.getElementById("btnHapus").style.display = lDisplay;
+            document.getElementById("btnRiwayat").style.display = lDisplay;
+        }
+
+        function toogleFormEdit2(lDisplay) {
+            document.getElementById("btnTambah").style.display = lDisplay;
+            document.getElementById("btnSimpan").style.display = lDisplay;
+        }
+
+        function btnClearInputSearchOnClick() {
+            meInputSearch.value = "";
+            meInputSearch.focus();
+            var $rows = $('#tableProduk tr');
+            $rows.show();
+        }
+
+        function btnBackupOnClick() {
+            var a = document.createElement("a");
+            var file = new Blob([JSON.stringify(mProdukDb, null, 2)], { type: 'application/json' });
+            a.href = URL.createObjectURL(file);
+            a.download = 'Produk.json';
+            a.click();
+            URL.revokeObjectURL(a.href)
+        }
+
+        function btnSimpanOnClick() {
+            if (mIsMenuProduk) {
+                btnSimpanpOnClick()
+            }
+            else if (mIsMenuTransaksi) {
+                btnSimpantOnClick()
+            }
+        }
+
+        function btnKopiOnClick() {
+            if (txtId.value != "") {
+                txtId.value = "";
+            } else {
+
+            }
+        }
+
+        function btnKembaliOnClick() {
+            meHiddenId.value = "";
+            meInputNama.value = "";
+            meInputLokasi.value = "";
+            meInputHarga.value = "";
+            meInputStok = "";
+            meInputUpdatestok = "";
+            meInputBeli = "";
+            meInputHet = "";
+            meInputUpdate = "";
+            meInputJumlah.value = "";
+            meInputTotal.value = "";
+            document.getElementById("formSearch").style.display = "block";
+            document.getElementById("formEdit").style.display = "none";
+            document.getElementById("tableRiwayat").style.display = "none";
+        }
+
         // ------------------------------------------- function --------------------------------      
 
-        function initHide() {
-            mIsMenu = false;
-            mIsMenuProduk = false;
-            mIsMenuTransaksi = false;
+        function initMain() {
+            let mIsMenuProduk = false;
+            let mIsMenuTransaksi = false;
             meFormMenu.style.display = "none";
             meFormLubang.style.display = "none";
             meFormSearch.style.display = "none";

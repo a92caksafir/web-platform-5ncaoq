@@ -1,9 +1,113 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Produk</title>
-  </head>
-  <body>
-    <p>tes</p>
-  </body>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kalkulator</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+
+<body>
+  <p>tes</p>
+  <form id="formEdit" class="form-horizontal" style="display: block;">
+    <div class="form-group">
+      <input type="hidden" class="form-control" id="id">
+    </div>
+    <div class="input-group">
+      <div class="input-group-btn">
+        <button type="button" class="btn btn-default">Nama</button>
+      </div>
+      <input class="form-control" id="inputNama" style="text-transform:uppercase">
+    </div>
+    <div class="input-group">
+      <div class="input-group-btn">
+        <button type="button" class="btn btn-default">Lokasi</button>
+      </div>
+      <input class="form-control" id="inputLokasi" style="text-transform:uppercase">
+    </div>
+    <div class="input-group">
+      <div class="input-group-btn">
+        <button type="button" class="btn btn-default">Harga</button>
+      </div>
+      <input class="form-control" id="inputHarga" style="text-transform:uppercase">
+    </div>
+    <div class="input-group" id="igStok" style="display: block;">
+      <div class="input-group-btn">
+        <button type="button" class="btn btn-default">Stok</button>
+      </div>
+      <input class="form-control" id="inputStok">
+    </div>
+    <div class="input-group" id="igUpdateStok" style="display: block;">
+      <div class="input-group-btn">
+        <button type="button" class="btn btn-default">Update Stok</button>
+      </div>
+      <input class="form-control" id="inputUpdatestok" readonly>
+    </div>
+    <div class="input-group" id="igBeli" style="display: block;">
+      <div class="input-group-btn">
+        <button type="button" class="btn btn-default">Beli</button>
+      </div>
+      <input class="form-control" id="inputBeli">
+    </div>
+    <div class="input-group" id="igHet" style="display: block;">
+      <div class="input-group-btn">
+        <button type="button" class="btn btn-default">Het</button>
+      </div>
+      <input class="form-control" id="inputHet">
+    </div>
+    <div class="input-group" id="igUpdateHarga" style="display: block;">
+      <div class="input-group-btn">
+        <button type="button" class="btn btn-default">Update Harga</button>
+      </div>
+      <input class="form-control" id="inputUpdate" readonly>
+    </div>
+    <div class="input-group">
+      <div class="input-group-btn">
+        <button type="button" class="btn btn-default" onclick="$('#meInputJumlah').val('0')">Jumlah</button>
+      </div>
+      <input class="form-control" id="inputJumlah" style="text-transform:uppercase">
+      <div class="input-group-btn">
+        <button type="button" class="btn btn-default" onclick="btnIncrementClick()"><span
+            class="glyphicon glyphicon-plus"></span></button>
+      </div>
+      <div class="input-group-btn">
+        <button type="button" class="btn btn-default" onclick="btnDecrementClick()"><span
+            class="glyphicon glyphicon-minus"></span></button>
+      </div>
+    </div>
+    <div class="input-group">
+      <div class="input-group-btn">
+        <button type="button" class="btn btn-default">Total</button>
+      </div>
+      <input class="form-control" id="inputTotal" style="text-transform:uppercase">
+    </div>
+    <button type="button" class="btn btn-default" onclick="btnTambahOnClick()" id="btnTambah"><span
+        class="glyphicon glyphicon-plus"></span></button>
+    <button type="button" class="btn btn-default" onclick="btnUbahOnClick()" id="btnUbah"><span
+        class="glyphicon glyphicon-ok"></span></button>
+    <button type="button" class="btn btn-default" onclick="btnBatalOnClick()" id="btnBatal"><span
+        class="glyphicon glyphicon-remove"></button>
+    <button type="button" class="btn btn-default" onclick="btnSimpanOnClick()" id="btnSimpan"><span
+        class="glyphicon glyphicon-floppy-disk"></button>
+    <button type="button" class="btn btn-default" onclick="btnHapuspOnClick()" id="btnHapus"><span
+        class="glyphicon glyphicon-trash"></span></button>
+    <button type="button" class="btn btn-default" onclick="btnRiwayatpOnClick()" id="btnRiwayat"><span
+        class="glyphicon glyphicon-time"></span></button>
+    <button type="button" class="btn btn-default" onclick="btnKopiOnClick()" id="btnKopi"><span
+        class="glyphicon glyphicon-duplicate"></button>
+    <button type="button" class="btn btn-default" onclick="btnKembaliOnClick()" id="btnKembali"
+      style="float: right;">Kembali</button>
+    <div class="form-group">
+      <div class="col-sm-2"></div>
+      <div class="col-sm-10 table-responsive">
+        <table class="table table-bordered table-striped" id="tableRiwayat" style="display: none;">
+        </table>
+      </div>
+    </div>
+  </form>
+</body>
+
 </html>

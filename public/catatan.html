@@ -92,7 +92,7 @@
                     </button>
                 </div>
             </div>
-            <button type="button" class="btn btn-default" onclick="transaksiOnClick()" id="btnTransaksi"
+            <button type="button" class="btn btn-default" onclick="btnTransaksiOnClick()" id="btnTransaksi"
                 style="float: right;">Kembali</button>
             <div class="table-responsive" id="tableProduk"></div>
             <button type="button" class="btn btn-default" onclick="btnTambahpOnClick()" id="btnTambahp"><span
@@ -183,7 +183,7 @@
                     class="glyphicon glyphicon-floppy-disk"></button>
             <button type="button" class="btn btn-default" onclick="btnHapuspOnClick()" id="btnHapus"><span
                     class="glyphicon glyphicon-trash"></span></button>
-            <button type="button" class="btn btn-default" onclick="btnRiwayatpOnClick()" id="btnRiwayat"><span
+            <button type="button" class="btn btn-default" onclick="btnRiwayatOnClick()" id="btnRiwayat"><span
                     class="glyphicon glyphicon-time"></span></button>
             <button type="button" class="btn btn-default" onclick="btnKopiOnClick()" id="btnKopi"><span
                     class="glyphicon glyphicon-duplicate"></button>
@@ -371,17 +371,17 @@
 
         function btnMenuProdukOnClick() {
             mIsMenuProduk = true;
+            meFormMenu.style.display = "none";
             toogleFormSearch("none")
-            toogleFormEdit("block");
-            toogleFormEdit2("none");
+            showFormEditXinput(true);
             initProduk();
         }
 
         function btnMenuTransaksiOnClick() {
             mIsMenuTransaksi = true;
+            meFormMenu.style.display = "none";
             toogleFormSearch("block")
-            toogleFormEdit("none");
-            toogleFormEdit2("block");
+            showFormEditXinput(false);
             initTransaksi();
         }
 
@@ -392,27 +392,6 @@
             else {
                 tableProdukTOnClick(lid)
             }
-        }
-
-        function toogleFormSearch(lDisplay) {
-            document.getElementById("btnTransaksi").style.display = lDisplay;
-
-        }
-
-        function toogleFormEdit(lDisplay) {
-            document.getElementById("igStok").style.display = lDisplay;
-            document.getElementById("igUpdateStok").style.display = lDisplay;
-            document.getElementById("igBeli").style.display = lDisplay;
-            document.getElementById("igHet").style.display = lDisplay;
-            document.getElementById("igUpdateHarga").style.display = lDisplay;
-
-            document.getElementById("btnHapus").style.display = lDisplay;
-            document.getElementById("btnRiwayat").style.display = lDisplay;
-        }
-
-        function toogleFormEdit2(lDisplay) {
-            document.getElementById("btnTambah").style.display = lDisplay;
-            document.getElementById("btnSimpan").style.display = lDisplay;
         }
 
         function btnClearInputSearchOnClick() {
@@ -466,6 +445,42 @@
         }
 
         // ------------------------------------------- function --------------------------------      
+
+        function toogleFormSearch(lDisplay) {
+            document.getElementById("btnTransaksi").style.display = lDisplay;
+
+        }
+
+        function showFormEditXinput(lDisplay) {
+            if (lDisplay) {
+                document.getElementById("igStok").style.removeProperty('display');
+                document.getElementById("igUpdateStok").style.removeProperty('display');
+                document.getElementById("igBeli").style.removeProperty('display');
+                document.getElementById("igHet").style.removeProperty('display');
+                document.getElementById("igUpdateHarga").style.removeProperty('display');
+
+                document.getElementById("btnHapus").style.removeProperty('display');
+                document.getElementById("btnRiwayat").style.removeProperty('display');
+
+                document.getElementById("btnTambah").style.display = "none";
+                document.getElementById("btnUbah").style.display = "none";
+                document.getElementById("btnBatal").style.display = "none";
+            } else {
+                document.getElementById("igStok").style.display = "none";
+                document.getElementById("igUpdateStok").style.display = "none";
+                document.getElementById("igBeli").style.display = "none";
+                document.getElementById("igHet").style.display = "none";
+                document.getElementById("igUpdateHarga").style.display = "none";
+
+                document.getElementById("btnHapus").style.display = "none";
+                document.getElementById("btnRiwayat").style.display = "none";
+
+                document.getElementById("btnTambah").style.removeProperty('display');
+                document.getElementById("btnUbah").style.removeProperty('display');
+                document.getElementById("btnBatal").style.removeProperty('display');
+            }
+
+        }
 
         function initMain() {
             let mIsMenuProduk = false;

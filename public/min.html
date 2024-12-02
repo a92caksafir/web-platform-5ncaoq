@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Transaksiku</title>
+
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/9.6.10/firebase-app-compat.js"></script>
+
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/9.6.10/firebase-auth-compat.js"></script>
+    <script defer src="/__/firebase/9.6.10/firebase-database-compat.js"></script>
+    <!-- 
+            initialize the SDK after all desired features are loaded, set useEmulator to false
+            to avoid connecting the SDK to running emulators.
+          -->
+    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+</head>
+
+<body>
+    <div class="container" id="signincontainer">
+        <button disabled type="button" class="btn btn-default" id="btnSignin" style="float: right;">Sign in with
+            Google</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            try {
+                let app = firebase.app();
+                let features = [
+                    'auth',
+                    'database',
+                ].filter(feature => typeof app[feature] === 'function');
+            } catch (e) {
+                console.error(e);
+            }
+        });
+
+        function toggleSignIn() {
+            if (!firebase.auth().currentUser) {
+                var provider = new firebase.auth.GoogleAuthProvider();
+                provider.addScope('https://www.googleapis.com/auth/plus.login');
+                firebase.auth().signInWithRedirect(provider);
+            } else {
+                firebase.auth().signOut();
+            }
+            document.getElementById('btnSignin').disabled = true;
+        }
+
+        function initApp() {
+            firebase.auth().getRedirectResult().then(function (result) {
+                if (result.credential) {
+                    var token = result.credential.accessToken;
+                } else {
+
+                }
+                var user = result.user;
+            }).catch(function (error) {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                var email = error.email;
+                var credential = error.credential;
+                if (errorCode === 'auth/account-exists-with-different-credential') {
+                    alert('You have already signed up with a different auth provider for that email.');
+                } else {
+                    console.error(error);
+                }
+            });
+
+            firebase.auth().onAuthStateChanged(function (user) {
+                if (user) {
+                    // User is signed in.
+                    var displayName = user.displayName;
+                    document.getElementById('btnSignin').textContent = 'Sign out ' + user.email;     
+                } else {
+                    // User is signed out.
+                    document.getElementById('btnSignin').textContent = 'Sign in with Google';
+                }
+                document.getElementById('btnSignin').disabled = false;
+            });
+            document.getElementById('btnSignin').addEventListener('click', toggleSignIn, false);
+        }
+
+        window.onload = function () {
+            initApp();
+        };
+
+    </script>
+
+</body>
+
+</html>

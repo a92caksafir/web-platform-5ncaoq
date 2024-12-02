@@ -110,11 +110,10 @@ function tableProdukTOnClick(lid) {
     }
 }
 
-function transaksiOnClick() {
+function btnTransaksiOnClick() {
     if (meFormTransaksi.style.display === "none") {
         meFormSearch.style.display = "none";
         meFormEdit.style.display = "none";
-        meFormEditp.style.display = "none";
         meFormTransaksi.style.display = "block";
     }
 }
